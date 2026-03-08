@@ -1,0 +1,135 @@
+{
+  "navigation": {
+    "feed": "Feed",
+    "search": "Search",
+    "saved": "Saved",
+    "profile": "Profile",
+    "settings": "Settings",
+    "logo": "Knowledge"
+  },
+  "onboarding": {
+    "title": "Welcome to Knowledge Discovery",
+    "step1": {
+      "title": "Choose Your Language",
+      "description": "Select your preferred language"
+    },
+    "step2": {
+      "title": "Select Your Interests",
+      "description": "Choose 3-5 categories to personalize your feed",
+      "categories": {
+        "science": "Science",
+        "history": "History",
+        "technology": "Technology",
+        "art": "Art",
+        "geography": "Geography",
+        "medicine": "Medicine",
+        "philosophy": "Philosophy",
+        "sports": "Sports",
+        "music": "Music",
+        "cinema": "Cinema"
+      }
+    },
+    "step3": {
+      "title": "Reading Time",
+      "description": "How much time do you usually spend reading?",
+      "quick": "Quick",
+      "quickDesc": "2 min reads",
+      "standard": "Standard",
+      "standardDesc": "5 min reads",
+      "deep": "Deep Dive",
+      "deepDesc": "10+ min reads"
+    },
+    "step4": {
+      "title": "Create Account",
+      "description": "Sign up to save your progress and preferences",
+      "signupGoogle": "Sign up with Google",
+      "signupGithub": "Sign up with GitHub",
+      "continueWithout": "Continue without account"
+    },
+    "next": "Next",
+    "back": "Back",
+    "skip": "Skip"
+  },
+  "feed": {
+    "title": "Your Feed",
+    "noArticles": "No articles found",
+    "loading": "Loading articles...",
+    "error": "Failed to load articles"
+  },
+  "article": {
+    "readMore": "Read more →",
+    "readingTime": "min read",
+    "source": "Source: Wikipedia",
+    "loading": "Loading article...",
+    "error": "Failed to load article",
+    "backToFeed": "Back to Feed"
+  },
+  "interactions": {
+    "like": "Like",
+    "likes": "Likes",
+    "save": "Save",
+    "saved": "Saved",
+    "notInterested": "Not interested",
+    "share": "Share",
+    "articleHidden": "Article hidden",
+    "undo": "Undo",
+    "copied": "Link copied to clipboard"
+  },
+  "search": {
+    "title": "Search",
+    "placeholder": "Search articles...",
+    "noResults": "No results found",
+    "searching": "Searching...",
+    "recentSearches": "Recent searches"
+  },
+  "saved": {
+    "title": "Saved Articles",
+    "empty": "No saved articles yet",
+    "count": "articles saved"
+  },
+  "profile": {
+    "title": "Profile",
+    "stats": "Your Stats",
+    "articlesRead": "Articles Read",
+    "currentStreak": "Current Streak",
+    "topCategories": "Top Categories",
+    "logout": "Logout",
+    "joinDate": "Joined",
+    "days": "days"
+  },
+  "settings": {
+    "title": "Settings",
+    "language": "Language",
+    "theme": "Theme",
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System",
+    "readingTime": "Preferred Reading Time",
+    "interests": "Interests",
+    "account": "Account",
+    "logout": "Logout",
+    "save": "Save Changes"
+  },
+  "auth": {
+    "login": "Login",
+    "signup": "Sign Up",
+    "email": "Email",
+    "password": "Password",
+    "rememberMe": "Remember me",
+    "noAccount": "Don't have an account?",
+    "alreadyHaveAccount": "Already have an account?",
+    "loginWithGoogle": "Login with Google",
+    "loginWithGithub": "Login with GitHub"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Something went wrong",
+    "tryAgain": "Try again",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "delete": "Delete",
+    "edit": "Edit",
+    "close": "Close",
+    "home": "Home"
+  }
+}

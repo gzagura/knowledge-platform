@@ -1,0 +1,135 @@
+{
+  "navigation": {
+    "feed": "Лента",
+    "search": "Поиск",
+    "saved": "Сохраненное",
+    "profile": "Профиль",
+    "settings": "Настройки",
+    "logo": "Знание"
+  },
+  "onboarding": {
+    "title": "Добро пожаловать в Knowledge Discovery",
+    "step1": {
+      "title": "Выберите язык",
+      "description": "Выберите предпочитаемый язык"
+    },
+    "step2": {
+      "title": "Выберите свои интересы",
+      "description": "Выберите 3-5 категорий для персонализации вашей ленты",
+      "categories": {
+        "science": "Наука",
+        "history": "История",
+        "technology": "Технология",
+        "art": "Искусство",
+        "geography": "География",
+        "medicine": "Медицина",
+        "philosophy": "Философия",
+        "sports": "Спорт",
+        "music": "Музыка",
+        "cinema": "Кинематография"
+      }
+    },
+    "step3": {
+      "title": "Время чтения",
+      "description": "Сколько времени вы обычно тратите на чтение?",
+      "quick": "Быстрое",
+      "quickDesc": "2 мин чтения",
+      "standard": "Стандартное",
+      "standardDesc": "5 мин чтения",
+      "deep": "Глубокое погружение",
+      "deepDesc": "10+ мин чтения"
+    },
+    "step4": {
+      "title": "Создать аккаунт",
+      "description": "Зарегистрируйтесь, чтобы сохранить свой прогресс и настройки",
+      "signupGoogle": "Зарегистрироваться через Google",
+      "signupGithub": "Зарегистрироваться через GitHub",
+      "continueWithout": "Продолжить без аккаунта"
+    },
+    "next": "Далее",
+    "back": "Назад",
+    "skip": "Пропустить"
+  },
+  "feed": {
+    "title": "Ваша лента",
+    "noArticles": "Статьи не найдены",
+    "loading": "Загрузка статей...",
+    "error": "Ошибка загрузки статей"
+  },
+  "article": {
+    "readMore": "Читать далее →",
+    "readingTime": "мин чтения",
+    "source": "Источник: Википедия",
+    "loading": "Загрузка статьи...",
+    "error": "Ошибка загрузки статьи",
+    "backToFeed": "Вернуться к ленте"
+  },
+  "interactions": {
+    "like": "Лайк",
+    "likes": "Лайки",
+    "save": "Сохранить",
+    "saved": "Сохранено",
+    "notInterested": "Не интересно",
+    "share": "Поделиться",
+    "articleHidden": "Статья скрыта",
+    "undo": "Отменить",
+    "copied": "Ссылка скопирована в буфер обмена"
+  },
+  "search": {
+    "title": "Поиск",
+    "placeholder": "Поиск статей...",
+    "noResults": "Результаты не найдены",
+    "searching": "Поиск...",
+    "recentSearches": "Последние поиски"
+  },
+  "saved": {
+    "title": "Сохраненные статьи",
+    "empty": "Нет сохраненных статей",
+    "count": "статей сохранено"
+  },
+  "profile": {
+    "title": "Профиль",
+    "stats": "Ваша статистика",
+    "articlesRead": "Прочитано статей",
+    "currentStreak": "Текущая серия",
+    "topCategories": "Топ категории",
+    "logout": "Выход",
+    "joinDate": "Присоединился",
+    "days": "дней"
+  },
+  "settings": {
+    "title": "Настройки",
+    "language": "Язык",
+    "theme": "Тема",
+    "light": "Светлая",
+    "dark": "Темная",
+    "system": "Система",
+    "readingTime": "Предпочитаемое время чтения",
+    "interests": "Интересы",
+    "account": "Аккаунт",
+    "logout": "Выход",
+    "save": "Сохранить изменения"
+  },
+  "auth": {
+    "login": "Вход",
+    "signup": "Регистрация",
+    "email": "Email",
+    "password": "Пароль",
+    "rememberMe": "Запомнить меня",
+    "noAccount": "Нет аккаунта?",
+    "alreadyHaveAccount": "Уже есть аккаунт?",
+    "loginWithGoogle": "Вход через Google",
+    "loginWithGithub": "Вход через GitHub"
+  },
+  "common": {
+    "loading": "Загрузка...",
+    "error": "Что-то пошло не так",
+    "tryAgain": "Попробуйте еще раз",
+    "cancel": "Отмена",
+    "confirm": "Подтвердить",
+    "delete": "Удалить",
+    "edit": "Редактировать",
+    "close": "Закрыть",
+    "home": "Главная"
+  }
+}
