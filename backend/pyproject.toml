@@ -35,6 +35,12 @@ dev = [
     "httpx>=0.26.0",
 ]
 
+[tool.setuptools.packages.find]
+# Only include the `app` package — keeps `api/` and `alembic/` out of the
+# wheel, which stops setuptools from refusing to build due to multiple
+# top-level packages (the error Vercel hits when running `uv sync`).
+include = ["app*"]
+
 [tool.ruff]
 line-length = 100
 target-version = "py312"
