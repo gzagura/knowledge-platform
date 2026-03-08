@@ -151,7 +151,7 @@ export function ArticleFullView({
             liked={liked}
             bookmarked={bookmarked}
             likeCount={likeCount}
-            onLike={(liked) => likeMutation.mutate(liked)}
+            onLike={() => likeMutation.mutate()}
             onBookmark={(bookmarked) => bookmarkMutation.mutate(bookmarked)}
             onDismiss={() => notInterestedMutation.mutate()}
             onShare={handleShare}
@@ -167,7 +167,7 @@ export function ArticleFullView({
             liked={liked}
             bookmarked={bookmarked}
             likeCount={likeCount}
-            onLike={(liked) => likeMutation.mutate(liked)}
+            onLike={() => likeMutation.mutate()}
             onBookmark={(bookmarked) => bookmarkMutation.mutate(bookmarked)}
             onDismiss={() => notInterestedMutation.mutate()}
             onShare={handleShare}

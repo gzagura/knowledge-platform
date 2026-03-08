@@ -82,7 +82,7 @@ export function ArticleCard({
                 liked={article.isLiked}
                 bookmarked={article.isBookmarked}
                 likeCount={article.likeCount ?? 0}
-                onLike={(liked) => likeMutation.mutate(liked)}
+                onLike={() => likeMutation.mutate()}
                 onBookmark={(bookmarked) => bookmarkMutation.mutate(bookmarked)}
                 onDismiss={() => notInterestedMutation.mutate()}
                 onShare={handleShare}
