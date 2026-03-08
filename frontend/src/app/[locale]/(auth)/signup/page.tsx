@@ -3,12 +3,15 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useLocale, useTranslations } from 'next-intl'
+import { api } from '@/lib/api'
 
 export default function SignupPage() {
+  const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
   const router = useRouter()
   const locale = useLocale()
   const t = useTranslations('auth')
@@ -22,14 +25,16 @@ export default function SignupPage() {
       return
     }
 
+    setLoading(true)
     try {
-      // In a real app, this would call the registration API
-      // For now, just store a mock token
-      localStorage.setItem('token', 'mock-token-' + Date.now())
+      const response = await api.post<{ access_token: string }>('/auth/register', { email, password, name })
+      localStorage.setItem('token', response.access_token)
       localStorage.setItem('onboarded', 'true')
       router.push(`/${locale}/feed`)
-    } catch (err) {
-      setError('Signup failed')
+    } catch (err: any) {
+      setError(err?.message?.includes('400') ? 'Email already registered' : 'Signup failed. Please try again.')
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -83,6 +88,21 @@ export default function SignupPage() {
           )}
 
           <div>
+            <label htmlFor="name" className="block text-sm font-medium text-text-primary mb-2">
+              Full Name
+            </label>
+            <input
+              id="name"
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Your name"
+              className="w-full px-4 py-2 bg-bg-secondary border border-border rounded-lg text-text-primary placeholder-text-tertiary focus:outline-none focus:border-accent transition-colors duration-150"
+              required
+            />
+          </div>
+
+          <div>
             <label htmlFor="email" className="block text-sm font-medium text-text-primary mb-2">
               {t('email')}
             </label>
@@ -129,9 +149,10 @@ export default function SignupPage() {
 
           <button
             type="submit"
-            className="w-full px-4 py-3 bg-accent text-white rounded-lg font-medium hover:opacity-90 transition-opacity duration-150"
+            disabled={loading}
+            className="w-full px-4 py-3 bg-accent text-white rounded-lg font-medium hover:opacity-90 transition-opacity duration-150 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {t('signup')}
+            {loading ? 'Creating account...' : t('signup')}
           </button>
         </form>
 

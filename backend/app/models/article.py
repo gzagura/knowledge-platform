@@ -19,7 +19,7 @@ class ArticleCache(Base):
     reading_time_minutes = Column(Integer, nullable=False)
     is_featured = Column(Boolean, default=False, nullable=False)
     image_url = Column(String(512), nullable=True)
-    cached_at = Column(DateTime, server_default=datetime.utcnow, nullable=False)
+    cached_at = Column(DateTime, default=datetime.utcnow, nullable=False)
 
     __table_args__ = (
         UniqueConstraint("wikipedia_id", "language", name="uq_article_cache_wiki_lang"),

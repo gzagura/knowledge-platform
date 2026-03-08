@@ -5,7 +5,7 @@ WORKDIR /app
 RUN pip install --no-cache-dir poetry
 
 COPY pyproject.toml ./
-RUN pip install --no-cache-dir fastapi uvicorn[standard] sqlalchemy[asyncio] asyncpg alembic httpx pyjwt python-jose[cryptography] bleach pydantic-settings python-multipart
+RUN pip install --no-cache-dir fastapi uvicorn[standard] sqlalchemy[asyncio] asyncpg alembic httpx pyjwt python-jose[cryptography] bleach "pydantic[email]" pydantic-settings python-multipart email-validator bcrypt
 
 COPY . .
 

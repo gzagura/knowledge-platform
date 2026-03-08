@@ -1,0 +1,26 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git config user.name)",
+      "Bash(git config user.email)",
+      "Read(//c/Program Files/GitHub CLI/**)",
+      "Read(//c/Users/gzagura/AppData/Local/Programs/GitHub CLI/**)",
+      "Bash(docker compose logs backend)",
+      "Bash(docker compose up --build backend)",
+      "Bash(docker compose ps)",
+      "Bash(docker compose restart frontend)",
+      "Bash(docker compose logs backend --tail=10)",
+      "Bash(docker compose logs backend --since=1m --tail=20)",
+      "Bash(docker compose exec backend alembic upgrade head)",
+      "Bash(docker compose exec backend sh -c \"cd /app && alembic upgrade head\")",
+      "Bash(docker compose up -d backend)",
+      "Bash(docker compose exec backend sh -c \"cd /app && PYTHONPATH=/app alembic upgrade head\")",
+      "Bash(ls \"c:\\\\Users\\\\gzagura\\\\Desktop\\\\claude\\\\knowledge-platform\\\\frontend\\\\src\\\\app\\\\[locale]\\\\\\(auth\\)\\\\login\"\")",
+      "Bash(node -e \"const fs=require\\(''fs''\\); console.log\\(fs.readFileSync\\(''c:/Users/gzagura/Desktop/claude/knowledge-platform/frontend/src/app/[locale]/\\(auth\\)/login/page.tsx'',''utf8''\\).slice\\(0,100\\)\\)\")",
+      "Bash(node -e \"const fs=require\\(''fs''\\); console.log\\(fs.readFileSync\\(''c:/Users/gzagura/Desktop/claude/knowledge-platform/frontend/src/app/[locale]/\\(auth\\)/login/page.tsx'',''utf8''\\).slice\\(0,300\\)\\)\")",
+      "Bash(node -e \"const fs=require\\(''fs''\\); const c=fs.readFileSync\\(''c:/Users/gzagura/Desktop/claude/knowledge-platform/frontend/src/app/[locale]/\\(auth\\)/login/page.tsx'',''utf8''\\); console.log\\(c\\)\")",
+      "Bash(docker compose exec backend sh -c \"cd /app && PYTHONPATH=/app alembic upgrade head; echo EXIT:$?\")",
+      "Bash(curl -s \"http://localhost:8000/api/v1/auth/me\")"
+    ]
+  }
+}

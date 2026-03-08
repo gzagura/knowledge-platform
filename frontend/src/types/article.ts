@@ -1,28 +1,29 @@
 export interface ArticleCard {
   id: string
+  wikipediaId: number
   title: string
   extract: string
-  category: string
-  readingTime: number
-  image?: string
-  funFact?: string
-  liked: boolean
-  bookmarked: boolean
-  likeCount: number
+  category: string | null
+  readingTimeMinutes: number
+  isFeatured: boolean
+  imageUrl?: string | null
+  language: string
+  isLiked: boolean
+  isBookmarked: boolean
+  funFact?: string | null
+  // UI-only helpers (computed or from optimistic updates)
+  likeCount?: number
 }
 
 export interface ArticleFull extends ArticleCard {
-  content: string
-  url: string
-  author?: string
-  lastModified?: string
-  views?: number
+  fullContent?: string | null
 }
 
 export interface SearchArticle {
   id: string
   title: string
   extract: string
-  category: string
-  readingTime: number
+  category: string | null
+  readingTimeMinutes: number
+  language: string
 }

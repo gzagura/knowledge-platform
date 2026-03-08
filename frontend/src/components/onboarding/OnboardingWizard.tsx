@@ -129,17 +129,17 @@ export function OnboardingWizard({ onComplete }: OnboardingWizardProps) {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {['English', 'Українська', 'Русский'].map((lang) => (
+                {([['en', 'English'], ['uk', 'Українська'], ['ru', 'Русский']] as const).map(([code, label]) => (
                   <button
-                    key={lang}
-                    onClick={() => setLanguage(lang.toLowerCase().slice(0, 2))}
+                    key={code}
+                    onClick={() => setLanguage(code)}
                     className={`p-6 rounded-lg border-2 transition-all duration-200 font-medium ${
-                      language === lang.toLowerCase().slice(0, 2)
+                      language === code
                         ? 'border-accent bg-bg-secondary text-text-primary'
                         : 'border-border hover:border-text-tertiary text-text-primary'
                     }`}
                   >
-                    {lang}
+                    {label}
                   </button>
                 ))}
               </div>

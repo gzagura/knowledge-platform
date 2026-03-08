@@ -8,13 +8,14 @@ export function useLike(articleId: string) {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: async (liked: boolean) => {
-      return api.post(`/articles/${articleId}/like`, { liked })
+    mutationFn: async () => {
+      // POST toggles the like on backend, returns { liked: bool }
+      return api.post(`/articles/${articleId}/like`, {})
     },
-    onMutate: async (liked) => {
-      // Optimistic update
+    onMutate: async () => {
       await queryClient.cancelQueries({ queryKey: ['articles'] })
 
+      // Optimistically toggle
       queryClient.setQueriesData<{ pages: ArticleCard[][] }>(
         { queryKey: ['articles', 'feed'] },
         (old) => {
@@ -26,10 +27,10 @@ export function useLike(articleId: string) {
                 article.id === articleId
                   ? {
                       ...article,
-                      liked,
-                      likeCount: liked
-                        ? article.likeCount + 1
-                        : Math.max(0, article.likeCount - 1),
+                      isLiked: !article.isLiked,
+                      likeCount: article.isLiked
+                        ? Math.max(0, (article.likeCount ?? 0) - 1)
+                        : (article.likeCount ?? 0) + 1,
                     }
                   : article
               )
@@ -37,6 +38,9 @@ export function useLike(articleId: string) {
           }
         }
       )
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ['articles', 'feed'] })
     },
   })
 }
@@ -46,10 +50,13 @@ export function useBookmark(articleId: string) {
 
   return useMutation({
     mutationFn: async (bookmarked: boolean) => {
-      return api.post(`/articles/${articleId}/bookmark`, { bookmarked })
+      if (bookmarked) {
+        return api.post('/bookmarks', { article_id: articleId, bookmarked: true })
+      } else {
+        return api.delete(`/bookmarks/${articleId}`)
+      }
     },
     onMutate: async (bookmarked) => {
-      // Optimistic update
       await queryClient.cancelQueries({ queryKey: ['articles'] })
 
       queryClient.setQueriesData<{ pages: ArticleCard[][] }>(
@@ -60,12 +67,15 @@ export function useBookmark(articleId: string) {
             ...old,
             pages: old.pages.map((page) =>
               page.map((article) =>
-                article.id === articleId ? { ...article, bookmarked } : article
+                article.id === articleId ? { ...article, isBookmarked: bookmarked } : article
               )
             ),
           }
         }
       )
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ['bookmarks'] })
     },
   })
 }
@@ -75,12 +85,13 @@ export function useNotInterested(articleId: string) {
 
   return useMutation({
     mutationFn: async () => {
-      return api.post(`/articles/${articleId}/not-interested`)
+      // No body needed
+      return api.post(`/articles/${articleId}/not-interested`, {})
     },
     onMutate: async () => {
-      // Optimistic update - remove from feed
       await queryClient.cancelQueries({ queryKey: ['articles'] })
 
+      // Remove from feed immediately
       queryClient.setQueriesData<{ pages: ArticleCard[][] }>(
         { queryKey: ['articles', 'feed'] },
         (old) => {
@@ -99,8 +110,8 @@ export function useNotInterested(articleId: string) {
 
 export function useShare(articleId: string) {
   return useMutation({
-    mutationFn: async (data?: Record<string, unknown>) => {
-      return api.post(`/articles/${articleId}/share`, data)
+    mutationFn: async (platform: string = 'copy') => {
+      return api.post(`/articles/${articleId}/share`, { platform })
     },
   })
 }

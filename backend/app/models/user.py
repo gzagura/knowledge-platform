@@ -18,4 +18,5 @@ class User(Base):
     ui_language = Column(String(10), default="en", nullable=False)  # en, uk, ru
     preferred_reading_time = Column(Integer, default=5, nullable=False)  # minutes
     theme = Column(String(20), default="auto", nullable=False)  # light, dark, auto
-    created_at = Column(DateTime, server_default=datetime.utcnow, nullable=False)
+    password_hash = Column(String(255), nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)

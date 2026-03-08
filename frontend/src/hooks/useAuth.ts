@@ -1,19 +1,39 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useQuery, useMutation } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { api } from '@/lib/api'
 import { User } from '@/types/user'
-import { mockUser } from '@/lib/mock-data'
 
-interface LoginRequest {
+interface BackendUser {
+  id: string
   email: string
-  password: string
+  name: string
+  avatar_url?: string
+  preferred_language: string
+  ui_language: string
+  preferred_reading_time: number
+  theme: string
+  created_at: string
 }
 
-interface AuthResponse {
-  token: string
-  user: User
+function mapUser(data: BackendUser): User {
+  const readingTime = data.preferred_reading_time <= 3
+    ? 'quick'
+    : data.preferred_reading_time >= 10
+      ? 'deep'
+      : 'standard'
+  return {
+    id: data.id,
+    email: data.email,
+    name: data.name,
+    avatar: data.avatar_url,
+    createdAt: data.created_at,
+    articlesRead: 0,
+    currentStreak: 0,
+    interests: [],
+    readingTimePreference: readingTime,
+  }
 }
 
 export function useAuth() {
@@ -23,26 +43,16 @@ export function useAuth() {
     setIsClient(true)
   }, [])
 
+  const hasToken = isClient && !!localStorage.getItem('token')
+
   const { data: user, isLoading } = useQuery({
     queryKey: ['auth', 'me'],
     queryFn: async () => {
-      try {
-        return await api.get<User>('/auth/me')
-      } catch {
-        // Fallback to mock user if authenticated
-        const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null
-        return token ? mockUser : null
-      }
+      const data = await api.get<BackendUser>('/auth/me')
+      return mapUser(data)
     },
-    enabled: isClient,
-  })
-
-  const login = useMutation({
-    mutationFn: async (credentials: LoginRequest) => {
-      const response = await api.post<AuthResponse>('/auth/login', credentials)
-      localStorage.setItem('token', response.token)
-      return response
-    },
+    enabled: isClient && hasToken,
+    retry: false,
   })
 
   const logout = () => {
@@ -52,9 +62,8 @@ export function useAuth() {
 
   return {
     user: user || null,
-    isLoading,
+    isLoading: isClient ? isLoading : true,
     isAuthenticated: !!user,
-    login,
     logout,
   }
 }

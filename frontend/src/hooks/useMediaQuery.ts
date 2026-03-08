@@ -7,15 +7,12 @@ export function useMediaQuery(query: string): boolean {
 
   useEffect(() => {
     const media = window.matchMedia(query)
-    if (media.matches !== matches) {
-      setMatches(media.matches)
-    }
+    setMatches(media.matches)
 
-    const listener = () => setMatches(media.matches)
+    const listener = (e: MediaQueryListEvent) => setMatches(e.matches)
     media.addEventListener('change', listener)
-
     return () => media.removeEventListener('change', listener)
-  }, [matches, query])
+  }, [query]) // only [query] — not [matches, query]
 
   return matches
 }
@@ -26,10 +23,5 @@ export function useResponsive() {
   const isDesktop = useMediaQuery('(min-width: 1024px)')
   const isWideDesktop = useMediaQuery('(min-width: 1280px)')
 
-  return {
-    isMobile,
-    isTablet,
-    isDesktop,
-    isWideDesktop,
-  }
+  return { isMobile, isTablet, isDesktop, isWideDesktop }
 }

@@ -12,6 +12,7 @@ class WikipediaClient:
     def __init__(self, cache_ttl_seconds: int = 3600):
         self.base_url_template = "https://{lang}.wikipedia.org/w/api.php"
         self.cache: dict = {}
+        self.cache_max_size = 500  # prevent unbounded growth
         self.cache_ttl = cache_ttl_seconds
         self.client = httpx.AsyncClient(timeout=30.0)
 
@@ -69,6 +70,10 @@ class WikipediaClient:
                         article["image_url"] = page_data["thumbnail"].get("source")
                     articles.append(article)
 
+            # Evict oldest entry if cache is too large
+            if len(self.cache) >= self.cache_max_size:
+                oldest = min(self.cache, key=lambda k: self.cache[k][0])
+                del self.cache[oldest]
             self.cache[cache_key] = (time.time(), articles)
             return articles
         except Exception as e:

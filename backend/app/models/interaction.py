@@ -20,7 +20,7 @@ class ArticleLike(Base):
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid4)
     user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False)
     article_id = Column(UUID(as_uuid=True), ForeignKey("article_cache.id"), nullable=False)
-    created_at = Column(DateTime, server_default=datetime.utcnow, nullable=False)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
 
     __table_args__ = (
         UniqueConstraint("user_id", "article_id", name="uq_article_like_user_article"),
@@ -35,7 +35,7 @@ class Bookmark(Base):
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid4)
     user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False)
     article_id = Column(UUID(as_uuid=True), ForeignKey("article_cache.id"), nullable=False)
-    created_at = Column(DateTime, server_default=datetime.utcnow, nullable=False)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
 
     __table_args__ = (
         UniqueConstraint("user_id", "article_id", name="uq_bookmark_user_article"),
@@ -51,7 +51,7 @@ class ArticleFeedback(Base):
     user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False)
     article_id = Column(UUID(as_uuid=True), ForeignKey("article_cache.id"), nullable=False)
     feedback = Column(String(50), nullable=False)  # "like" or "not_interested"
-    created_at = Column(DateTime, server_default=datetime.utcnow, nullable=False)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
 
     __table_args__ = (
         Index("ix_feedback_user_id", "user_id"),
@@ -65,7 +65,7 @@ class ReadingHistory(Base):
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid4)
     user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False)
     article_id = Column(UUID(as_uuid=True), ForeignKey("article_cache.id"), nullable=False)
-    started_at = Column(DateTime, server_default=datetime.utcnow, nullable=False)
+    started_at = Column(DateTime, default=datetime.utcnow, nullable=False)
     finished_at = Column(DateTime, nullable=True)
     reading_duration_seconds = Column(Integer, nullable=True)
     scroll_depth_percent = Column(Integer, nullable=True)
@@ -83,7 +83,7 @@ class ArticleShare(Base):
     user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False)
     article_id = Column(UUID(as_uuid=True), ForeignKey("article_cache.id"), nullable=False)
     platform = Column(String(50), nullable=False)  # twitter, facebook, email, etc.
-    created_at = Column(DateTime, server_default=datetime.utcnow, nullable=False)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
 
     __table_args__ = (
         Index("ix_share_user_id", "user_id"),
