@@ -34,13 +34,14 @@ export default function ArticlePage({ params }: ArticlePageProps) {
     <ArticleFullView
       articleId={article.id}
       title={article.title}
-      content={article.content}
-      category={article.category}
-      readingTime={article.readingTime}
-      liked={article.liked}
-      bookmarked={article.bookmarked}
-      likeCount={article.likeCount}
-      url={article.url}
+      // backend returns fullContent; fall back to content or extract
+      content={article.fullContent ?? article.content ?? article.extract ?? ''}
+      category={article.category ?? ''}
+      readingTime={article.readingTimeMinutes}
+      liked={article.isLiked}
+      bookmarked={article.isBookmarked}
+      likeCount={article.likeCount ?? 0}
+      url={article.url ?? `https://en.wikipedia.org/wiki/${encodeURIComponent(article.title)}`}
       onClose={() => router.back()}
     />
   )

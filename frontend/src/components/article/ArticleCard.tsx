@@ -28,15 +28,9 @@ export function ArticleCard({
 
   const handleShare = async () => {
     const url = `${window.location.origin}/${locale}/article/${article.id}`
-
     if (navigator.share) {
-      navigator.share({
-        title: article.title,
-        text: article.extract,
-        url,
-      })
+      navigator.share({ title: article.title, text: article.extract, url })
     } else {
-      // Fallback: copy to clipboard
       navigator.clipboard.writeText(url)
       setShowCopiedSnackbar(true)
       shareMutation.mutate()
@@ -48,7 +42,10 @@ export function ArticleCard({
       <div className="w-full min-h-dvh flex flex-col justify-center items-center px-4 py-8 gap-6 scroll-snap-child">
         <div className="w-full max-w-2xl space-y-6">
           {/* Category & Reading Time */}
-          <CategoryLabel category={article.category} readingTime={article.readingTime} />
+          <CategoryLabel
+            category={article.category}
+            readingTimeMinutes={article.readingTimeMinutes}
+          />
 
           {/* Title */}
           <h1 className="text-2xl md:text-3xl font-bold text-text-primary leading-tight line-clamp-2">
@@ -69,7 +66,7 @@ export function ArticleCard({
             </div>
           )}
 
-          {/* Read More Link */}
+          {/* Read More */}
           <button
             onClick={() => router.push(`/${locale}/article/${article.id}`)}
             className="text-accent font-medium text-sm hover:opacity-75 transition-opacity duration-150"
@@ -82,9 +79,9 @@ export function ArticleCard({
             <div className="pt-4 border-t border-border mt-6">
               <InteractionBar
                 articleId={article.id}
-                liked={article.liked}
-                bookmarked={article.bookmarked}
-                likeCount={article.likeCount}
+                liked={article.isLiked}
+                bookmarked={article.isBookmarked}
+                likeCount={article.likeCount ?? 0}
                 onLike={(liked) => likeMutation.mutate(liked)}
                 onBookmark={(bookmarked) => bookmarkMutation.mutate(bookmarked)}
                 onDismiss={() => notInterestedMutation.mutate()}

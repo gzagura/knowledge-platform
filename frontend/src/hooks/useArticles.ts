@@ -19,7 +19,6 @@ export function useArticleFeed(category?: string) {
         })
         return await api.get<ArticleCard[]>(`/articles/feed?${params}`)
       } catch {
-        // Fallback to mock data
         return mockArticles
       }
     },
@@ -33,23 +32,25 @@ export function useArticleFeed(category?: string) {
 export function useArticle(id: string) {
   return useQuery({
     queryKey: ['articles', id],
-    queryFn: async () => {
+    queryFn: async (): Promise<ArticleFull> => {
       try {
         return await api.get<ArticleFull>(`/articles/${id}`)
       } catch {
-        // Fallback to mock data
+        // Fallback to mock data — fields use the camelCase names from ArticleFull
         return (
-          mockArticlesFull[id] || {
+          mockArticlesFull[id] ?? {
             id,
+            wikipediaId: 0,
             title: 'Article Not Found',
             extract: '',
-            category: '',
-            readingTime: 0,
-            liked: false,
-            bookmarked: false,
-            likeCount: 0,
+            category: null,
+            readingTimeMinutes: 0,
+            isFeatured: false,
+            language: 'en',
+            isLiked: false,
+            isBookmarked: false,
+            fullContent: '',
             url: '',
-            content: '',
           }
         )
       }
@@ -65,7 +66,6 @@ export function useRandomArticles(count: number = 3) {
       try {
         return await api.get<ArticleCard[]>(`/articles/random?count=${count}`)
       } catch {
-        // Fallback to mock data
         return mockArticles.slice(0, count)
       }
     },
@@ -82,7 +82,6 @@ export function useSearchArticles(query: string) {
           `/articles/search?q=${encodeURIComponent(query)}`
         )
       } catch {
-        // Fallback to mock search
         const lowerQuery = query.toLowerCase()
         return mockArticles.filter(
           (article) =>

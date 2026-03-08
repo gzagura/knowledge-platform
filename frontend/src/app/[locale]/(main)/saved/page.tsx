@@ -40,7 +40,7 @@ export default function SavedPage() {
             >
               <CategoryLabel
                 category={article.category}
-                readingTime={article.readingTime}
+                readingTimeMinutes={article.readingTimeMinutes}
               />
               <h3 className="text-xl font-semibold text-text-primary mt-3 line-clamp-2">
                 {article.title}

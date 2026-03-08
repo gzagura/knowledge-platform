@@ -47,7 +47,7 @@ export default function SearchPage() {
               >
                 <CategoryLabel
                   category={article.category}
-                  readingTime={article.readingTime}
+                  readingTimeMinutes={article.readingTimeMinutes}
                 />
                 <h3 className="text-lg font-semibold text-text-primary mt-2 line-clamp-2">
                   {article.title}
