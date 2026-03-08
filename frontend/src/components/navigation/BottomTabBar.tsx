@@ -43,7 +43,7 @@ export function BottomTabBar() {
             className={`flex items-center justify-center w-14 h-14 transition-colors duration-150 ${
               active ? 'text-accent' : 'text-text-secondary'
             }`}
-            aria-label={t(key as keyof typeof navItems)}
+            aria-label={t(key)}
           >
             <Icon className="w-6 h-6" />
           </Link>

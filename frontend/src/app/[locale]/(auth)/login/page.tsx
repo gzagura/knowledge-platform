@@ -20,8 +20,8 @@ export default function LoginPage() {
     setLoading(true)
 
     try {
-      const response = await api.post<{ access_token: string }>('/auth/login', { email, password })
-      localStorage.setItem('token', response.access_token)
+      const response = await api.post<{ accessToken: string }>('/auth/login', { email, password })
+      localStorage.setItem('token', response.accessToken)
       router.push(`/${locale}/feed`)
     } catch {
       setError('Invalid email or password')

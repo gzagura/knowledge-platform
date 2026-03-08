@@ -27,8 +27,8 @@ export default function SignupPage() {
 
     setLoading(true)
     try {
-      const response = await api.post<{ access_token: string }>('/auth/register', { email, password, name })
-      localStorage.setItem('token', response.access_token)
+      const response = await api.post<{ accessToken: string }>('/auth/register', { email, password, name })
+      localStorage.setItem('token', response.accessToken)
       localStorage.setItem('onboarded', 'true')
       router.push(`/${locale}/feed`)
     } catch (err: any) {

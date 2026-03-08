@@ -8,17 +8,15 @@ import { LanguageSwitcher } from '@/components/ui/LanguageSwitcher'
 import { useAuth } from '@/hooks/useAuth'
 
 const categories = [
-  'Science',
-  'History',
-  'Technology',
-  'Art',
-  'Geography',
-  'Medicine',
-  'Philosophy',
-  'Sports',
-  'Music',
-  'Cinema',
+  'Science', 'History', 'Technology', 'Art', 'Geography',
+  'Medicine', 'Philosophy', 'Sports', 'Music', 'Cinema',
 ]
+
+const themeOptions = [
+  { value: 'light', labelKey: 'settings.light' },
+  { value: 'dark',  labelKey: 'settings.dark' },
+  { value: 'system', labelKey: 'settings.system' },
+] as const
 
 export default function SettingsPage() {
   const t = useTranslations()
@@ -27,9 +25,7 @@ export default function SettingsPage() {
   const { user, logout } = useAuth()
   const { theme, setTheme } = useTheme()
 
-  const [readingTime, setReadingTime] = useState<'quick' | 'standard' | 'deep'>(
-    'standard'
-  )
+  const [readingTime, setReadingTime] = useState<'quick' | 'standard' | 'deep'>('standard')
   const [interests, setInterests] = useState<string[]>([])
   const [isSaved, setIsSaved] = useState(false)
 
@@ -42,53 +38,36 @@ export default function SettingsPage() {
 
   const toggleInterest = (interest: string) => {
     setInterests((prev) =>
-      prev.includes(interest)
-        ? prev.filter((i) => i !== interest)
-        : [...prev, interest]
+      prev.includes(interest) ? prev.filter((i) => i !== interest) : [...prev, interest]
     )
   }
 
   const handleSave = () => {
-    localStorage.setItem(
-      'userPreferences',
-      JSON.stringify({
-        language: locale,
-        interests,
-        readingTime,
-      })
-    )
+    localStorage.setItem('userPreferences', JSON.stringify({ language: locale, interests, readingTime }))
     setIsSaved(true)
     setTimeout(() => setIsSaved(false), 2000)
   }
 
   return (
     <div className="max-w-4xl mx-auto w-full flex flex-col px-4 py-6 md:px-6 md:py-8">
-      {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-text-primary mb-2">
-          {t('settings.title')}
-        </h1>
+        <h1 className="text-3xl font-bold text-text-primary mb-2">{t('settings.title')}</h1>
       </div>
 
-      {/* Settings Sections */}
       <div className="space-y-8">
         {/* Theme */}
         <div className="border-b border-border pb-8">
-          <h2 className="text-xl font-semibold text-text-primary mb-4">
-            {t('settings.theme')}
-          </h2>
+          <h2 className="text-xl font-semibold text-text-primary mb-4">{t('settings.theme')}</h2>
           <div className="flex gap-4">
-            {['light', 'dark', 'system'].map((t_mode) => (
+            {themeOptions.map(({ value, labelKey }) => (
               <button
-                key={t_mode}
-                onClick={() => setTheme(t_mode)}
+                key={value}
+                onClick={() => setTheme(value)}
                 className={`px-4 py-2 border rounded-lg transition-colors duration-150 capitalize ${
-                  theme === t_mode
-                    ? 'bg-accent text-white border-accent'
-                    : 'border-border hover:bg-bg-secondary'
+                  theme === value ? 'bg-accent text-white border-accent' : 'border-border hover:bg-bg-secondary'
                 }`}
               >
-                {t(`settings.${t_mode as keyof typeof t}`)}
+                {t(labelKey)}
               </button>
             ))}
           </div>
@@ -96,30 +75,24 @@ export default function SettingsPage() {
 
         {/* Language */}
         <div className="border-b border-border pb-8">
-          <h2 className="text-xl font-semibold text-text-primary mb-4">
-            {t('settings.language')}
-          </h2>
+          <h2 className="text-xl font-semibold text-text-primary mb-4">{t('settings.language')}</h2>
           <LanguageSwitcher />
         </div>
 
         {/* Reading Time */}
         <div className="border-b border-border pb-8">
-          <h2 className="text-xl font-semibold text-text-primary mb-4">
-            {t('settings.readingTime')}
-          </h2>
+          <h2 className="text-xl font-semibold text-text-primary mb-4">{t('settings.readingTime')}</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {[
+            {([
               { value: 'quick', label: 'Quick (2 min)' },
               { value: 'standard', label: 'Standard (5 min)' },
               { value: 'deep', label: 'Deep Dive (10+ min)' },
-            ].map(({ value, label }) => (
+            ] as const).map(({ value, label }) => (
               <button
                 key={value}
-                onClick={() => setReadingTime(value as any)}
+                onClick={() => setReadingTime(value)}
                 className={`px-4 py-3 border rounded-lg transition-colors duration-150 ${
-                  readingTime === value
-                    ? 'bg-accent text-white border-accent'
-                    : 'border-border hover:bg-bg-secondary'
+                  readingTime === value ? 'bg-accent text-white border-accent' : 'border-border hover:bg-bg-secondary'
                 }`}
               >
                 {label}
@@ -130,9 +103,7 @@ export default function SettingsPage() {
 
         {/* Interests */}
         <div className="border-b border-border pb-8">
-          <h2 className="text-xl font-semibold text-text-primary mb-4">
-            {t('settings.interests')}
-          </h2>
+          <h2 className="text-xl font-semibold text-text-primary mb-4">{t('settings.interests')}</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
             {categories.map((category) => (
               <button
@@ -153,9 +124,7 @@ export default function SettingsPage() {
         {/* Account */}
         {user && (
           <div className="pb-8">
-            <h2 className="text-xl font-semibold text-text-primary mb-4">
-              {t('settings.account')}
-            </h2>
+            <h2 className="text-xl font-semibold text-text-primary mb-4">{t('settings.account')}</h2>
             <button
               onClick={logout}
               className="px-6 py-2 border border-accent text-accent rounded-lg font-medium hover:bg-accent hover:text-white transition-colors duration-150"
@@ -166,7 +135,6 @@ export default function SettingsPage() {
         )}
       </div>
 
-      {/* Save Button */}
       <div className="flex gap-4 mt-8 pt-8 border-t border-border">
         <button
           onClick={handleSave}
@@ -174,11 +142,7 @@ export default function SettingsPage() {
         >
           {t('settings.save')}
         </button>
-        {isSaved && (
-          <span className="flex items-center text-sm text-accent">
-            ✓ Changes saved
-          </span>
-        )}
+        {isSaved && <span className="flex items-center text-sm text-accent">✓ Changes saved</span>}
       </div>
     </div>
   )
