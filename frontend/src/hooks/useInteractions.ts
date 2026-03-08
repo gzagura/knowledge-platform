@@ -110,8 +110,8 @@ export function useNotInterested(articleId: string) {
 
 export function useShare(articleId: string) {
   return useMutation({
-    mutationFn: async (platform: string = 'copy') => {
-      return api.post(`/articles/${articleId}/share`, { platform })
+    mutationFn: async (platform?: string) => {
+      return api.post(`/articles/${articleId}/share`, { platform: platform ?? 'copy' })
     },
   })
 }
