@@ -83,33 +83,60 @@ export const mockArticles: ArticleCard[] = [
   },
 ]
 
+// Inline full objects (no spread) so TypeScript can verify all required fields
 export const mockArticlesFull: Record<string, ArticleFull> = {
   '1': {
-    ...mockArticles[0],
+    id: '1',
+    wikipediaId: 1,
+    title: 'The History of Artificial Intelligence',
+    extract: 'Explore the fascinating journey of AI from its philosophical roots to modern machine learning.',
+    category: 'Technology',
+    readingTimeMinutes: 5,
+    isFeatured: false,
+    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/a/a7/Camponotus_flavomarginatus_ant.jpg',
+    language: 'en',
+    funFact: 'The term "Artificial Intelligence" was coined in 1956 at the Dartmouth Summer Research Project.',
+    isLiked: false,
+    isBookmarked: false,
+    likeCount: 342,
+    url: 'https://en.wikipedia.org/wiki/Artificial_intelligence',
     fullContent: `
       <h2>History</h2>
-      <p>The history of artificial intelligence began in the 1950s when computer scientists started exploring whether machines could simulate human intelligence. The field was formally established as an academic discipline at the Dartmouth Summer Research Project on Artificial Intelligence in 1956.</p>
+      <p>The history of artificial intelligence began in the 1950s when computer scientists started exploring whether machines could simulate human intelligence.</p>
       <h3>Early Years (1950s–1970s)</h3>
-      <p>In the early years, researchers were optimistic about AI. This period saw the development of the first AI programs, including the Logic Theorist and the General Problem Solver.</p>
+      <p>This period saw the first AI programs, including the Logic Theorist and the General Problem Solver.</p>
       <h3>AI Winter (1970s–1980s)</h3>
-      <p>As expectations didn't meet reality, funding dried up and the field entered what became known as the "AI Winter".</p>
+      <p>As expectations outpaced reality, funding dried up — a period known as the "AI Winter".</p>
       <h3>Modern Era (2000s–Present)</h3>
-      <p>The 21st century has seen explosive growth in AI, driven by advances in machine learning, deep learning, and big data.</p>
+      <p>The 21st century brought explosive growth driven by machine learning, deep learning, and big data.</p>
     `,
   },
   '2': {
-    ...mockArticles[1],
+    id: '2',
+    wikipediaId: 2,
+    title: 'Ancient Rome: Rise and Fall of an Empire',
+    extract: "Discover how Rome transformed from a small city-state to one of history's greatest empires.",
+    category: 'History',
+    readingTimeMinutes: 8,
+    isFeatured: false,
+    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/a/a7/Camponotus_flavomarginatus_ant.jpg',
+    language: 'en',
+    funFact: 'Ancient Romans invented concrete, which is still used in modern construction.',
+    isLiked: false,
+    isBookmarked: false,
+    likeCount: 521,
+    url: 'https://en.wikipedia.org/wiki/Ancient_Rome',
     fullContent: `
       <h2>Overview</h2>
       <p>Ancient Rome was a civilization centered on the city of Rome that began on the Italian Peninsula as early as the 8th century BC.</p>
       <h3>The Kingdom of Rome (753–509 BC)</h3>
       <p>According to legend, Rome was founded on April 21, 753 BC by Romulus and ruled by kings until 509 BC.</p>
       <h3>The Roman Republic (509–27 BC)</h3>
-      <p>During this period, Rome expanded its territory and influence across the Mediterranean.</p>
+      <p>Rome expanded its territory and influence across the Mediterranean during this period.</p>
       <h3>The Roman Empire (27 BC–476 AD)</h3>
       <p>Augustus became the first emperor, inaugurating the Roman Empire at its greatest territorial extent.</p>
       <h3>Fall of Rome</h3>
-      <p>The Western Roman Empire fell in 476 AD due to political instability, economic troubles, and invasions by Germanic tribes.</p>
+      <p>The Western Roman Empire fell in 476 AD due to political instability and invasions by Germanic tribes.</p>
     `,
   },
 }
