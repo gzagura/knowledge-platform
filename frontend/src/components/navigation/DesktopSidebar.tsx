@@ -1,6 +1,6 @@
 'use client'
 
-import { useTranslations } from 'next-intl'
+import { useTranslations, useLocale } from 'next-intl'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import {
@@ -24,16 +24,12 @@ const navItems = [
 export function DesktopSidebar() {
   const t = useTranslations('navigation')
   const pathname = usePathname()
+  const locale = useLocale()
 
-  const getLocalizedPath = (href: string) => {
-    const localeMatch = pathname.match(/^\/([a-z]{2})/)
-    const locale = localeMatch ? localeMatch[1] : 'en'
-    return `/${locale}${href}`
-  }
+  const getLocalizedPath = (href: string) => `/${locale}${href}`
 
   const isActive = (href: string) => {
-    const localizedPath = getLocalizedPath(href)
-    return pathname === localizedPath || pathname.endsWith(href)
+    return pathname === getLocalizedPath(href)
   }
 
   return (

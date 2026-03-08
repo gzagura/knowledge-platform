@@ -1,6 +1,6 @@
 'use client'
 
-import { useTranslations } from 'next-intl'
+import { useTranslations, useLocale } from 'next-intl'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import {
@@ -19,23 +19,18 @@ const navItems = [
 ]
 
 export function BottomTabBar() {
+  // All hooks must be called before any conditional return
   const { isDesktop } = useResponsive()
   const t = useTranslations('navigation')
   const pathname = usePathname()
+  const locale = useLocale()
 
   // Hide on desktop
   if (isDesktop) return null
 
-  const getLocalizedPath = (href: string) => {
-    const localeMatch = pathname.match(/^\/([a-z]{2})/)
-    const locale = localeMatch ? localeMatch[1] : 'en'
-    return `/${locale}${href}`
-  }
+  const getLocalizedPath = (href: string) => `/${locale}${href}`
 
-  const isActive = (href: string) => {
-    const localizedPath = getLocalizedPath(href)
-    return pathname === localizedPath || pathname.endsWith(href)
-  }
+  const isActive = (href: string) => pathname === getLocalizedPath(href)
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 h-14 border-t border-border bg-bg-primary z-40 flex items-center justify-around">

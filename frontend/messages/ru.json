@@ -119,7 +119,11 @@
     "noAccount": "Нет аккаунта?",
     "alreadyHaveAccount": "Уже есть аккаунт?",
     "loginWithGoogle": "Вход через Google",
-    "loginWithGithub": "Вход через GitHub"
+    "loginWithGithub": "Вход через GitHub",
+    "signupGoogle": "Зарегистрироваться через Google",
+    "signupGithub": "Зарегистрироваться через GitHub",
+    "name": "Полное имя",
+    "confirmPassword": "Подтвердите пароль"
   },
   "common": {
     "loading": "Загрузка...",

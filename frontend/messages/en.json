@@ -119,7 +119,11 @@
     "noAccount": "Don't have an account?",
     "alreadyHaveAccount": "Already have an account?",
     "loginWithGoogle": "Login with Google",
-    "loginWithGithub": "Login with GitHub"
+    "loginWithGithub": "Login with GitHub",
+    "signupGoogle": "Sign up with Google",
+    "signupGithub": "Sign up with GitHub",
+    "name": "Full Name",
+    "confirmPassword": "Confirm Password"
   },
   "common": {
     "loading": "Loading...",

@@ -13,19 +13,11 @@ export function LanguageSwitcher() {
   const pathname = usePathname()
 
   const handleLanguageChange = (newLocale: string) => {
-    const pathSegments = pathname.split('/')
-    const currentLocaleIndex = pathSegments.findIndex((segment) =>
-      locales.includes(segment as any)
-    )
-
-    if (currentLocaleIndex !== -1) {
-      pathSegments[currentLocaleIndex] = newLocale
-    } else {
-      pathSegments.splice(1, 0, newLocale)
-    }
-
-    const newPathname = pathSegments.join('/')
-    router.push(newPathname)
+    // With localePrefix: 'always', pathname always starts with /[locale]/...
+    // Replace the locale segment at the start: /en/feed → /uk/feed
+    const withoutLocale = pathname.replace(/^\/[a-z]{2}(\/|$)/, '/')
+    const newPath = `/${newLocale}${withoutLocale === '/' ? '' : withoutLocale}`
+    router.push(newPath)
     setIsOpen(false)
   }
 

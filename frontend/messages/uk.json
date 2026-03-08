@@ -119,7 +119,11 @@
     "noAccount": "Немаєте аккаунту?",
     "alreadyHaveAccount": "Вже маєте аккаунт?",
     "loginWithGoogle": "Вхід через Google",
-    "loginWithGithub": "Вхід через GitHub"
+    "loginWithGithub": "Вхід через GitHub",
+    "signupGoogle": "Зареєструватися через Google",
+    "signupGithub": "Зареєструватися через GitHub",
+    "name": "Повне імя",
+    "confirmPassword": "Підтвердіть пароль"
   },
   "common": {
     "loading": "Завантаження...",
