@@ -109,9 +109,10 @@ export function useNotInterested(articleId: string) {
 }
 
 export function useShare(articleId: string) {
+  // No variables — TanStack Query infers TVariables=void, so mutate() works with no args
   return useMutation({
-    mutationFn: async (platform?: string) => {
-      return api.post(`/articles/${articleId}/share`, { platform: platform ?? 'copy' })
+    mutationFn: async () => {
+      return api.post(`/articles/${articleId}/share`, { platform: 'copy' })
     },
   })
 }
