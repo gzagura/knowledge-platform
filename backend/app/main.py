@@ -12,12 +12,32 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
+def _run_migrations() -> None:
+    """Run Alembic migrations on startup (safe for serverless cold starts)."""
+    try:
+        from alembic.config import Config
+        from alembic import command
+        import os
+
+        alembic_cfg = Config(os.path.join(os.path.dirname(__file__), "..", "alembic.ini"))
+        # Override sqlalchemy.url with our runtime db_url so Alembic uses the
+        # same Vercel Postgres connection that the app uses.
+        alembic_cfg.set_main_option("sqlalchemy.url", settings.db_url.replace(
+            "postgresql+asyncpg://", "postgresql://"  # Alembic uses sync driver
+        ))
+        command.upgrade(alembic_cfg, "head")
+        logger.info("Database migrations applied successfully.")
+    except Exception as exc:
+        # Don't crash the server if migrations fail (e.g. already up-to-date)
+        logger.warning(f"Migration step skipped or failed: {exc}")
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Startup and shutdown events."""
     logger.info("Starting Knowledge Discovery Platform API...")
+    _run_migrations()
     yield
-    # Cleanup: close any open Wikipedia API clients
     logger.info("Shutting down...")
 
 

@@ -4,15 +4,17 @@ from sqlalchemy.ext.asyncio import (
     async_sessionmaker,
 )
 from sqlalchemy.orm import declarative_base
+from sqlalchemy.pool import NullPool
 
 from app.core.config import settings
 
+# NullPool is required for serverless environments (Vercel) — each request
+# gets a fresh connection; no background threads for pool management.
 engine = create_async_engine(
-    settings.DATABASE_URL,
+    settings.db_url,
     echo=False,
     future=True,
-    pool_size=20,
-    max_overflow=0,
+    poolclass=NullPool,
 )
 
 async_session = async_sessionmaker(
