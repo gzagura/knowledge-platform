@@ -125,8 +125,12 @@ async def remove_bookmark(
     result = await db.execute(stmt)
     bookmark = result.scalar_one_or_none()
 
-    if bookmark:
-        await db.delete(bookmark)
-        await db.commit()
+    if not bookmark:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Bookmark not found",
+        )
 
+    await db.delete(bookmark)
+    await db.commit()
     return {"bookmarked": False}

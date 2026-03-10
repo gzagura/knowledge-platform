@@ -54,7 +54,8 @@
     "title": "Your Feed",
     "noArticles": "No articles found",
     "loading": "Loading articles...",
-    "error": "Failed to load articles"
+    "error": "Failed to load articles",
+    "endOfFeed": "You have reached the end of your feed"
   },
   "article": {
     "readMore": "Read more →",
@@ -80,7 +81,9 @@
     "placeholder": "Search articles...",
     "noResults": "No results found",
     "searching": "Searching...",
-    "recentSearches": "Recent searches"
+    "recentSearches": "Recent searches",
+    "error": "Search failed. Please try again.",
+    "resultsCount": "{count} results for '{query}'"
   },
   "saved": {
     "title": "Saved Articles",

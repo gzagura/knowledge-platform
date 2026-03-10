@@ -1,8 +1,10 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useQuery } from '@tanstack/react-query'
-import { api } from '@/lib/api'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useRouter } from 'next/navigation'
+import { useLocale } from 'next-intl'
+import { api, TOKEN_KEY } from '@/lib/api'
 import { User } from '@/types/user'
 
 interface BackendUser {
@@ -38,17 +40,21 @@ function mapUser(data: BackendUser): User {
 
 export function useAuth() {
   const [isClient, setIsClient] = useState(false)
+  const router = useRouter()
+  const locale = useLocale()
+  const queryClient = useQueryClient()
 
   useEffect(() => {
     setIsClient(true)
   }, [])
 
-  const hasToken = isClient && !!localStorage.getItem('token')
+  const hasToken = isClient && !!localStorage.getItem(TOKEN_KEY)
 
   const { data: user, isLoading } = useQuery({
     queryKey: ['auth', 'me'],
     queryFn: async () => {
-      const data = await api.get<BackendUser>('/auth/me')
+      // Corrected endpoint: GET /api/v1/users/me (not /auth/me)
+      const data = await api.get<BackendUser>('/users/me')
       return mapUser(data)
     },
     enabled: isClient && hasToken,
@@ -56,8 +62,11 @@ export function useAuth() {
   })
 
   const logout = () => {
-    localStorage.removeItem('token')
-    window.location.href = '/'
+    localStorage.removeItem(TOKEN_KEY)
+    // Clear the edge-auth cookie so middleware stops allowing protected routes.
+    document.cookie = 'kp_auth=; path=/; max-age=0; SameSite=Lax'
+    queryClient.removeQueries({ queryKey: ['auth', 'me'] })
+    router.push(`/${locale}/login`)
   }
 
   return {

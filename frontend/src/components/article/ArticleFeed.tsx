@@ -63,7 +63,10 @@ export function ArticleFeed({ category }: ArticleFeedProps) {
     )
   }
 
-  const articles = data?.pages.flat() || []
+  // Each page is a PaginatedFeedResponse — flatten the items arrays across pages
+  const articles = data?.pages.flatMap((page) => page.items) ?? []
+  // has_more from the most recent page tells us whether more content is available
+  const hasMore = data?.pages.at(-1)?.hasMore ?? true
 
   if (articles.length === 0) {
     return (
@@ -81,7 +84,19 @@ export function ArticleFeed({ category }: ArticleFeedProps) {
 
       {isFetchingNextPage && <ArticleSkeleton />}
 
-      <div ref={observerTarget} className="h-1" />
+      {/* Sentinel — the observer fires fetchNextPage when this element is visible */}
+      <div ref={observerTarget} className="h-1" aria-hidden="true" />
+
+      {/* End-of-feed indicator — shown when the backend signals no further pages */}
+      {!hasMore && !isFetchingNextPage && (
+        <div
+          className="w-full py-8 flex items-center justify-center"
+          role="status"
+          aria-live="polite"
+        >
+          <p className="text-text-tertiary text-sm">{t('endOfFeed')}</p>
+        </div>
+      )}
     </div>
   )
 }

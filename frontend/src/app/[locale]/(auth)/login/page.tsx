@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useLocale, useTranslations } from 'next-intl'
-import { api } from '@/lib/api'
+import { api, TOKEN_KEY } from '@/lib/api'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
@@ -21,7 +21,10 @@ export default function LoginPage() {
 
     try {
       const response = await api.post<{ accessToken: string }>('/auth/login', { email, password })
-      localStorage.setItem('token', response.accessToken)
+      localStorage.setItem(TOKEN_KEY, response.accessToken)
+      // Set a lightweight auth cookie so the edge middleware can detect the
+      // authenticated state and protect server-side route redirects.
+      document.cookie = 'kp_auth=1; path=/; SameSite=Lax'
       router.push(`/${locale}/feed`)
     } catch {
       setError('Invalid email or password')

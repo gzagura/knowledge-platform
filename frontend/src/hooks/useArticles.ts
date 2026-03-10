@@ -2,7 +2,12 @@
 
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
 import { api } from '@/lib/api'
-import { ArticleCard, ArticleFull, SearchArticle } from '@/types/article'
+import {
+  ArticleCard,
+  ArticleFull,
+  PaginatedFeedResponse,
+  SearchResponse,
+} from '@/types/article'
 import { mockArticles, mockArticlesFull } from '@/lib/mock-data'
 
 const ARTICLES_PER_PAGE = 10
@@ -10,22 +15,27 @@ const ARTICLES_PER_PAGE = 10
 export function useArticleFeed(category?: string) {
   return useInfiniteQuery({
     queryKey: ['articles', 'feed', category],
-    queryFn: async ({ pageParam = 0 }) => {
+    queryFn: async ({ pageParam }: { pageParam: string | undefined }) => {
       try {
         const params = new URLSearchParams({
-          skip: String(pageParam * ARTICLES_PER_PAGE),
           limit: String(ARTICLES_PER_PAGE),
+          ...(pageParam && { cursor: pageParam }),
           ...(category && { category }),
         })
-        return await api.get<ArticleCard[]>(`/articles/feed?${params}`)
+        return await api.get<PaginatedFeedResponse>(`/articles/feed?${params}`)
       } catch {
-        return mockArticles
+        // Fallback mock keeps the same PaginatedFeedResponse shape
+        return {
+          items: mockArticles,
+          nextCursor: null,
+          hasMore: false,
+        } satisfies PaginatedFeedResponse
       }
     },
-    getNextPageParam: (lastPage, pages) => {
-      return lastPage.length === ARTICLES_PER_PAGE ? pages.length : undefined
-    },
-    initialPageParam: 0,
+    // Return next_cursor (camelCased by api.ts to nextCursor) as the next pageParam,
+    // or undefined to signal no more pages.
+    getNextPageParam: (lastPage) => lastPage.nextCursor ?? undefined,
+    initialPageParam: undefined as string | undefined,
   })
 }
 
@@ -72,24 +82,40 @@ export function useRandomArticles(count: number = 3) {
   })
 }
 
-export function useSearchArticles(query: string) {
+export function useSearchArticles(query: string, lang = 'en', limit = 10) {
   return useQuery({
-    queryKey: ['articles', 'search', query],
-    queryFn: async () => {
-      if (!query.trim()) return []
+    queryKey: ['search', query, lang, limit],
+    queryFn: async (): Promise<SearchResponse> => {
+      const params = new URLSearchParams({
+        q: query,
+        lang,
+        limit: String(limit),
+      })
       try {
-        return await api.get<SearchArticle[]>(
-          `/articles/search?q=${encodeURIComponent(query)}`
-        )
+        // Correct endpoint: GET /api/v1/search (not /articles/search)
+        return await api.get<SearchResponse>(`/search?${params}`)
       } catch {
+        // Fallback mock keeps the SearchResponse shape
         const lowerQuery = query.toLowerCase()
-        return mockArticles.filter(
+        const filtered = mockArticles.filter(
           (article) =>
             article.title.toLowerCase().includes(lowerQuery) ||
             article.extract.toLowerCase().includes(lowerQuery)
         )
+        return {
+          query,
+          items: filtered.map((a) => ({
+            id: a.wikipediaId,
+            title: a.title,
+            extract: a.extract,
+            language: a.language,
+          })),
+          total: filtered.length,
+          language: lang,
+        }
       }
     },
-    enabled: !!query.trim(),
+    // Only fire when query is at least 2 characters
+    enabled: query.trim().length >= 2,
   })
 }

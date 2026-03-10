@@ -1,0 +1,1022 @@
+{
+  "_readme": "This file is the single source of truth for project tasks, bugs, sessions, and decisions. It is read and written by all agents. Keep it accurate — the PM owns this file.",
+
+  "project": "knowledge-platform",
+  "version": "1.0.0",
+  "last_updated": "2026-03-09",
+
+  "agents": {
+    "frontend": {
+      "current_task": null,
+      "last_active": "2026-03-09",
+      "scope": "Next.js 14, TypeScript strict, Tailwind CSS, shadcn/ui, Framer Motion, TanStack Query, next-intl"
+    },
+    "backend": {
+      "current_task": "TASK-008",
+      "last_active": "2026-03-09",
+      "scope": "FastAPI, Python 3.12, SQLAlchemy async, Alembic, Redis, Celery, httpx, Docker"
+    },
+    "qa": {
+      "current_task": null,
+      "last_active": "2026-03-09",
+      "scope": "pytest, pytest-asyncio, httpx.AsyncClient, Vitest, Playwright"
+    }
+  },
+
+  "current_sprint": {
+    "id": "sprint-1",
+    "goal": "Make the app usable end-to-end: fix both confirmed API contract mismatches (feed pagination, search URL), establish a minimum test baseline on both backend and frontend, and validate the authentication loop.",
+    "started": "2026-03-09",
+    "ends": null,
+    "story_ids": ["STORY-001", "STORY-002", "STORY-003", "STORY-004", "STORY-005"],
+    "task_ids": [
+      "TASK-001", "TASK-002", "TASK-003", "TASK-004",
+      "TASK-005", "TASK-006", "TASK-007",
+      "TASK-008", "TASK-009", "TASK-010", "TASK-011", "TASK-012",
+      "TASK-013", "TASK-014", "TASK-015", "TASK-016", "TASK-017",
+      "TASK-018", "TASK-019", "TASK-020", "TASK-021", "TASK-022", "TASK-023",
+      "TASK-024", "TASK-025"
+    ]
+  },
+
+  "stories": [
+    {
+      "id": "STORY-001",
+      "title": "User can scroll an infinite article feed that loads more articles on demand",
+      "type": "improvement",
+      "priority": "critical",
+      "status": "in_review",
+      "assigned_to": "frontend",
+      "sprint": "sprint-1",
+      "estimated_points": 5,
+      "blocked_by": null,
+      "blocked_reason": null,
+      "task_ids": ["TASK-001", "TASK-002", "TASK-003", "TASK-004"],
+      "created_by": "pm",
+      "created_at": "2026-03-09",
+      "updated_at": "2026-03-09",
+      "file": "docs/stories/STORY-001.md"
+    },
+    {
+      "id": "STORY-002",
+      "title": "User can search for articles and receive results from the correct backend endpoint",
+      "type": "improvement",
+      "priority": "critical",
+      "status": "in_review",
+      "assigned_to": "frontend",
+      "sprint": "sprint-1",
+      "estimated_points": 2,
+      "blocked_by": null,
+      "blocked_reason": null,
+      "task_ids": ["TASK-005", "TASK-006", "TASK-007"],
+      "created_by": "pm",
+      "created_at": "2026-03-09",
+      "updated_at": "2026-03-09",
+      "file": "docs/stories/STORY-002.md"
+    },
+    {
+      "id": "STORY-003",
+      "title": "Backend critical-path endpoints have automated test coverage that runs in CI",
+      "type": "feature",
+      "priority": "high",
+      "status": "ready",
+      "assigned_to": "backend",
+      "sprint": "sprint-1",
+      "estimated_points": 8,
+      "blocked_by": null,
+      "blocked_reason": null,
+      "task_ids": ["TASK-008", "TASK-009", "TASK-010", "TASK-011", "TASK-012"],
+      "created_by": "pm",
+      "created_at": "2026-03-09",
+      "updated_at": "2026-03-09",
+      "file": "docs/stories/STORY-003.md"
+    },
+    {
+      "id": "STORY-004",
+      "title": "Frontend critical user journeys have automated integration tests",
+      "type": "feature",
+      "priority": "high",
+      "status": "blocked",
+      "assigned_to": "frontend",
+      "sprint": "sprint-1",
+      "estimated_points": 8,
+      "blocked_by": "STORY-001, STORY-002",
+      "blocked_reason": "Tests must be written against the corrected pagination and search URL behaviour. Writing them against the broken state would produce tests that pass on broken code.",
+      "task_ids": ["TASK-013", "TASK-014", "TASK-015", "TASK-016", "TASK-017"],
+      "created_by": "pm",
+      "created_at": "2026-03-09",
+      "updated_at": "2026-03-09",
+      "file": "docs/stories/STORY-004.md"
+    },
+    {
+      "id": "STORY-005",
+      "title": "User can log in, receive a JWT, and access personalised features end-to-end",
+      "type": "improvement",
+      "priority": "critical",
+      "status": "in_progress",
+      "assigned_to": "frontend",
+      "sprint": "sprint-1",
+      "estimated_points": 5,
+      "blocked_by": "BUG-001, BUG-004",
+      "blocked_reason": "BUG-001: backend /auth/refresh endpoint is missing — the 401 refresh flow cannot be completed end-to-end until TASK-024 is done. BUG-004: onboarding wizard auth step performs no login call and stores no token — AC-6 cannot pass until TASK-025 is done.",
+      "task_ids": ["TASK-018", "TASK-019", "TASK-020", "TASK-021", "TASK-022", "TASK-023", "TASK-024", "TASK-025"],
+      "created_by": "pm",
+      "created_at": "2026-03-09",
+      "updated_at": "2026-03-09",
+      "file": "docs/stories/STORY-005.md"
+    }
+  ],
+
+  "backlog": [],
+
+  "tasks": [
+    {
+      "id": "TASK-001",
+      "type": "feat",
+      "title": "Update feed hook to useInfiniteQuery with cursor pagination",
+      "description": "Replace useQuery on the feed with TanStack Query's useInfiniteQuery. The getNextPageParam callback must return lastPage.next_cursor ?? undefined. Remove the skip offset counter.",
+      "assigned_to": "frontend",
+      "status": "done",
+      "priority": "critical",
+      "story": "STORY-001",
+      "created_by": "pm",
+      "created_at": "2026-03-09",
+      "updated_at": "2026-03-09",
+      "acceptance_criteria": [
+        "useInfiniteQuery is used for the feed, not useQuery",
+        "getNextPageParam returns next_cursor from the last page",
+        "No skip parameter is ever sent in a feed request",
+        "cursor parameter is sent on all pages after the first"
+      ],
+      "comments": [
+        {
+          "author": "frontend",
+          "date": "2026-03-09",
+          "text": "Replaced skip/limit offset approach with cursor-based useInfiniteQuery. pageParam is now string|undefined (the cursor). getNextPageParam returns lastPage.nextCursor ?? undefined. initialPageParam is undefined (no cursor on first load). PaginatedFeedResponse is the query function return type."
+        }
+      ],
+      "blocked_reason": null,
+      "related_bug": null
+    },
+    {
+      "id": "TASK-002",
+      "type": "feat",
+      "title": "Update ArticleFeed component to consume infinite query pages",
+      "description": "Flatten data.pages into a single article array for rendering. Wire the Intersection Observer callback to fetchNextPage. Show Skeleton component during load-more. Show end-of-feed indicator when has_more is false.",
+      "assigned_to": "frontend",
+      "status": "done",
+      "priority": "critical",
+      "story": "STORY-001",
+      "created_by": "pm",
+      "created_at": "2026-03-09",
+      "updated_at": "2026-03-09",
+      "acceptance_criteria": [
+        "Articles from all pages are rendered in a single flat list",
+        "Intersection Observer triggers fetchNextPage when has_more is true",
+        "Skeleton is shown at the bottom during a load-more fetch",
+        "End-of-feed indicator is shown when has_more is false"
+      ],
+      "comments": [
+        {
+          "author": "frontend",
+          "date": "2026-03-09",
+          "text": "ArticleFeed now uses data.pages.flatMap(page => page.items). End-of-feed indicator reads hasMore from data.pages.at(-1).hasMore; shown with role=status aria-live=polite. Existing Intersection Observer and ArticleSkeleton wiring unchanged."
+        }
+      ],
+      "blocked_reason": null,
+      "related_bug": null
+    },
+    {
+      "id": "TASK-003",
+      "type": "chore",
+      "title": "Update PaginatedFeedResponse type and remove skip parameter",
+      "description": "Add or update the PaginatedFeedResponse TypeScript type in src/types/article.ts to: { items: ArticleCard[]; next_cursor: string | null; has_more: boolean }. Remove any type or variable referencing skip on the feed.",
+      "assigned_to": "frontend",
+      "status": "done",
+      "priority": "critical",
+      "story": "STORY-001",
+      "created_by": "pm",
+      "created_at": "2026-03-09",
+      "updated_at": "2026-03-09",
+      "acceptance_criteria": [
+        "PaginatedFeedResponse type exists and matches backend schema",
+        "No TypeScript strict errors",
+        "No reference to skip remains in feed-related types or hooks"
+      ],
+      "comments": [
+        {
+          "author": "frontend",
+          "date": "2026-03-09",
+          "text": "Added PaginatedFeedResponse { items: ArticleCard[]; nextCursor: string | null; hasMore: boolean } to src/types/article.ts. Fields are camelCase because api.ts transforms snake_case keys. Also added SearchResultItem and SearchResponse types. Old SearchArticle kept but deprecated."
+        }
+      ],
+      "blocked_reason": null,
+      "related_bug": null
+    },
+    {
+      "id": "TASK-004",
+      "type": "chore",
+      "title": "Verify backend feed endpoint cursor parameter handling",
+      "description": "Confirm that GET /api/v1/articles/feed in app/api/v1/endpoints/articles.py accepts cursor: Optional[str] = None and that the RecommendationEngine uses it correctly. Confirm skip is not silently accepted in a way that causes side-effects.",
+      "assigned_to": "backend",
+      "status": "backlog",
+      "priority": "critical",
+      "story": "STORY-001",
+      "created_by": "pm",
+      "created_at": "2026-03-09",
+      "updated_at": "2026-03-09",
+      "acceptance_criteria": [
+        "cursor parameter is accepted as Optional[str]",
+        "RecommendationEngine correctly uses cursor for pagination",
+        "No regression in feed response shape: { items, next_cursor, has_more }"
+      ],
+      "comments": [],
+      "blocked_reason": null,
+      "related_bug": null
+    },
+    {
+      "id": "TASK-005",
+      "type": "fix",
+      "title": "Fix search API URL from /articles/search to /search",
+      "description": "Locate the search fetch call in the frontend (useArticles.ts, a dedicated useSearch hook, or the search page component) and change the URL from /articles/search to /search. Confirm the full resolved URL is /api/v1/search.",
+      "assigned_to": "frontend",
+      "status": "done",
+      "priority": "critical",
+      "story": "STORY-002",
+      "created_by": "pm",
+      "created_at": "2026-03-09",
+      "updated_at": "2026-03-09",
+      "acceptance_criteria": [
+        "No request is ever made to /articles/search",
+        "Search requests go to /api/v1/search",
+        "q, lang, and limit parameters are forwarded correctly"
+      ],
+      "comments": [
+        {
+          "author": "frontend",
+          "date": "2026-03-09",
+          "text": "Changed fetch path from /articles/search to /search in useSearchArticles. With API_URL=http://localhost:8000/api/v1 the full URL resolves to /api/v1/search. q, lang, and limit are all forwarded via URLSearchParams. Minimum query length guard (>=2 chars) added via enabled flag."
+        }
+      ],
+      "blocked_reason": null,
+      "related_bug": null
+    },
+    {
+      "id": "TASK-006",
+      "type": "chore",
+      "title": "Align SearchResult type definition to backend response schema",
+      "description": "Update the frontend SearchResult type (or equivalent) to match the backend response: { query: string, items: Array<{ id: number, title: string, extract: string, language: string }>, total: number, language: string }. Note that id is a wikipedia_id integer, not a UUID.",
+      "assigned_to": "frontend",
+      "status": "done",
+      "priority": "critical",
+      "story": "STORY-002",
+      "created_by": "pm",
+      "created_at": "2026-03-09",
+      "updated_at": "2026-03-09",
+      "acceptance_criteria": [
+        "SearchResult type matches backend response shape exactly",
+        "id field is typed as number (not string or UUID)",
+        "No TypeScript strict errors in search-related components or hooks"
+      ],
+      "comments": [
+        {
+          "author": "frontend",
+          "date": "2026-03-09",
+          "text": "Added SearchResultItem { id: number; title: string; extract: string; language: string } and SearchResponse { query: string; items: SearchResultItem[]; total: number; language: string } to src/types/article.ts. id is number (wikipedia_id), not UUID. search page updated to use SearchResponse shape and links to Wikipedia directly for this sprint."
+        }
+      ],
+      "blocked_reason": null,
+      "related_bug": null
+    },
+    {
+      "id": "TASK-007",
+      "type": "chore",
+      "title": "Verify backend search router mount path end-to-end",
+      "description": "Confirm in app/api/v1/router.py that the search router is mounted with prefix /search, resolving the full path to /api/v1/search. Manually curl the endpoint to confirm a 200 response.",
+      "assigned_to": "backend",
+      "status": "backlog",
+      "priority": "critical",
+      "story": "STORY-002",
+      "created_by": "pm",
+      "created_at": "2026-03-09",
+      "updated_at": "2026-03-09",
+      "acceptance_criteria": [
+        "GET /api/v1/search?q=test returns HTTP 200",
+        "Router mount path confirmed correct in router.py"
+      ],
+      "comments": [],
+      "blocked_reason": null,
+      "related_bug": null
+    },
+    {
+      "id": "TASK-008",
+      "type": "feat",
+      "title": "Set up pytest + pytest-asyncio test infrastructure and conftest.py",
+      "description": "Create backend/app/tests/conftest.py with: async test database session (SQLite in-memory via aiosqlite preferred), get_db dependency override, AsyncClient factory fixture. Add aiosqlite to dev dependencies in pyproject.toml. Configure asyncio_mode = auto in pytest config.",
+      "assigned_to": "backend",
+      "status": "in_progress",
+      "priority": "high",
+      "story": "STORY-003",
+      "created_by": "pm",
+      "created_at": "2026-03-09",
+      "updated_at": "2026-03-09",
+      "acceptance_criteria": [
+        "pytest runs from backend/ directory with exit code 0 on an empty test suite",
+        "conftest.py provides an async_client fixture using httpx.AsyncClient",
+        "Test database is isolated from the development database",
+        "Base.metadata.create_all() runs before tests and drop_all() after"
+      ],
+      "comments": [],
+      "blocked_reason": null,
+      "related_bug": null
+    },
+    {
+      "id": "TASK-009",
+      "type": "feat",
+      "title": "Write authentication endpoint tests",
+      "description": "Write async tests for POST /api/v1/auth/login: new user returns 200 with access_token and user object; same credentials returns same user (no duplicate); missing email field returns 422.",
+      "assigned_to": "backend",
+      "status": "in_progress",
+      "priority": "high",
+      "story": "STORY-003",
+      "created_by": "pm",
+      "created_at": "2026-03-09",
+      "updated_at": "2026-03-09",
+      "acceptance_criteria": [
+        "Test for successful login passes",
+        "Test for idempotent user creation (no duplicate) passes",
+        "Test for missing email body returns 422 passes"
+      ],
+      "comments": [],
+      "blocked_reason": null,
+      "related_bug": null
+    },
+    {
+      "id": "TASK-010",
+      "type": "feat",
+      "title": "Write feed endpoint tests including cursor pagination",
+      "description": "Write async tests for GET /api/v1/articles/feed: anonymous access returns correct shape; authenticated access works; cursor from page 1 used in page 2 returns 200 and non-overlapping articles; invalid cursor does not return 500.",
+      "assigned_to": "backend",
+      "status": "in_progress",
+      "priority": "high",
+      "story": "STORY-003",
+      "created_by": "pm",
+      "created_at": "2026-03-09",
+      "updated_at": "2026-03-09",
+      "acceptance_criteria": [
+        "Anonymous feed request returns { items, next_cursor, has_more }",
+        "Authenticated feed request returns the same shape",
+        "Cursor pagination round-trip test passes",
+        "Invalid cursor does not cause a 500 response"
+      ],
+      "comments": [],
+      "blocked_reason": null,
+      "related_bug": null
+    },
+    {
+      "id": "TASK-011",
+      "type": "feat",
+      "title": "Write search endpoint tests",
+      "description": "Write async tests for GET /api/v1/search: valid query returns 200 with { query, items, total, language }; missing q parameter returns 422.",
+      "assigned_to": "backend",
+      "status": "in_progress",
+      "priority": "high",
+      "story": "STORY-003",
+      "created_by": "pm",
+      "created_at": "2026-03-09",
+      "updated_at": "2026-03-09",
+      "acceptance_criteria": [
+        "Search with valid query returns 200 and correct response shape",
+        "Search without q parameter returns 422"
+      ],
+      "comments": [],
+      "blocked_reason": null,
+      "related_bug": null
+    },
+    {
+      "id": "TASK-012",
+      "type": "feat",
+      "title": "Write bookmark round-trip tests including ownership check",
+      "description": "Write async tests for POST /api/v1/bookmarks, GET /api/v1/bookmarks, DELETE /api/v1/bookmarks/{id}: an authenticated user can create, list, and delete their own bookmark; user B cannot delete user A's bookmark (404).",
+      "assigned_to": "backend",
+      "status": "in_progress",
+      "priority": "high",
+      "story": "STORY-003",
+      "created_by": "pm",
+      "created_at": "2026-03-09",
+      "updated_at": "2026-03-09",
+      "acceptance_criteria": [
+        "Create bookmark returns 200 or 201",
+        "List bookmarks returns the created bookmark",
+        "Delete own bookmark succeeds",
+        "Delete another user's bookmark returns 404"
+      ],
+      "comments": [],
+      "blocked_reason": null,
+      "related_bug": null
+    },
+    {
+      "id": "TASK-013",
+      "type": "feat",
+      "title": "Set up Vitest + Testing Library + MSW in frontend",
+      "description": "Add vitest, @vitejs/plugin-react, @testing-library/react, @testing-library/user-event, and msw to devDependencies. Create frontend/vitest.config.ts with jsdom environment and path alias matching tsconfig.json. Add npm run test script.",
+      "assigned_to": "frontend",
+      "status": "backlog",
+      "priority": "high",
+      "story": "STORY-004",
+      "created_by": "pm",
+      "created_at": "2026-03-09",
+      "updated_at": "2026-03-09",
+      "acceptance_criteria": [
+        "npm run test runs Vitest and exits 0 on an empty test suite",
+        "Path alias @/* resolves correctly in tests",
+        "MSW is available for fetch interception in hook tests"
+      ],
+      "comments": [],
+      "blocked_reason": null,
+      "related_bug": null
+    },
+    {
+      "id": "TASK-014",
+      "type": "feat",
+      "title": "Write feed hook unit tests (cursor, no-skip, has_more behaviour)",
+      "description": "Write Vitest tests for the corrected feed hook using MSW to mock fetch. Assert: first call has no cursor and no skip; second call (after fetchNextPage) has cursor=<value>; when has_more is false, fetchNextPage is not triggered; network error preserves page 1 data.",
+      "assigned_to": "frontend",
+      "status": "backlog",
+      "priority": "high",
+      "story": "STORY-004",
+      "created_by": "pm",
+      "created_at": "2026-03-09",
+      "updated_at": "2026-03-09",
+      "acceptance_criteria": [
+        "First fetch URL contains no skip and no cursor",
+        "Second fetch URL contains cursor=<next_cursor from page 1>",
+        "has_more: false stops further fetches",
+        "Network error on page 2 leaves page 1 articles intact"
+      ],
+      "comments": [],
+      "blocked_reason": null,
+      "related_bug": null
+    },
+    {
+      "id": "TASK-015",
+      "type": "feat",
+      "title": "Write search hook unit tests (URL correctness, empty query suppression)",
+      "description": "Write Vitest tests for the corrected search hook using MSW. Assert: query of 1 character fires no request; query of 2+ characters fires request to /api/v1/search (not /articles/search); clearing the input fires no request.",
+      "assigned_to": "frontend",
+      "status": "backlog",
+      "priority": "high",
+      "story": "STORY-004",
+      "created_by": "pm",
+      "created_at": "2026-03-09",
+      "updated_at": "2026-03-09",
+      "acceptance_criteria": [
+        "1-character query fires no request",
+        "2+ character query fires request to /api/v1/search",
+        "No request to /articles/search in any test",
+        "Clearing input fires no request"
+      ],
+      "comments": [],
+      "blocked_reason": null,
+      "related_bug": null
+    },
+    {
+      "id": "TASK-016",
+      "type": "feat",
+      "title": "Set up Playwright and write feed E2E test",
+      "description": "Add @playwright/test to devDependencies. Create frontend/playwright.config.ts targeting http://localhost:3000. Write e2e/feed.spec.ts: navigate to feed, wait for article cards, scroll to bottom, assert additional cards appear within 5 seconds.",
+      "assigned_to": "frontend",
+      "status": "backlog",
+      "priority": "high",
+      "story": "STORY-004",
+      "created_by": "pm",
+      "created_at": "2026-03-09",
+      "updated_at": "2026-03-09",
+      "acceptance_criteria": [
+        "npm run test:e2e runs Playwright against localhost:3000",
+        "Feed test navigates to feed and sees article cards",
+        "Scrolling to bottom loads additional cards",
+        "Test passes against a running local stack with seeded article_cache data"
+      ],
+      "comments": [],
+      "blocked_reason": null,
+      "related_bug": null
+    },
+    {
+      "id": "TASK-017",
+      "type": "feat",
+      "title": "Write search E2E test",
+      "description": "Write e2e/search.spec.ts: navigate to search page, type 'history', wait for debounce, assert at least one result card with a non-empty title is visible. Assert that clearing the input returns to the empty state.",
+      "assigned_to": "frontend",
+      "status": "backlog",
+      "priority": "high",
+      "story": "STORY-004",
+      "created_by": "pm",
+      "created_at": "2026-03-09",
+      "updated_at": "2026-03-09",
+      "acceptance_criteria": [
+        "Typing 'history' produces at least one result card",
+        "Result card has a non-empty title",
+        "Clearing the input returns to the prompt/empty state"
+      ],
+      "comments": [],
+      "blocked_reason": null,
+      "related_bug": null
+    },
+    {
+      "id": "TASK-018",
+      "type": "fix",
+      "title": "Verify and correct current-user endpoint URL in useAuth.ts",
+      "description": "Open src/hooks/useAuth.ts and locate the current-user fetch. If it calls /auth/me, change it to /users/me (with the /api/v1 prefix applied by api.ts). Confirm the resolved URL is GET /api/v1/users/me.",
+      "assigned_to": "frontend",
+      "status": "done",
+      "priority": "critical",
+      "story": "STORY-005",
+      "created_by": "pm",
+      "created_at": "2026-03-09",
+      "updated_at": "2026-03-09",
+      "acceptance_criteria": [
+        "No request to /auth/me anywhere in the codebase",
+        "Current user is fetched from GET /api/v1/users/me",
+        "User name and email display correctly on the profile page"
+      ],
+      "comments": [
+        {
+          "author": "qa",
+          "date": "2026-03-09",
+          "text": "Confirmed mismatch: useAuth.ts line 51 called api.get('/auth/me'). Fixed: changed to api.get('/users/me'). Also fixed logout to use router.push (locale-aware) instead of window.location.href, and imported TOKEN_KEY constant to replace bare string 'token'. See BUG-002 (resolved) and BUG-006 (resolved)."
+        }
+      ],
+      "blocked_reason": null,
+      "related_bug": "BUG-002"
+    },
+    {
+      "id": "TASK-019",
+      "type": "feat",
+      "title": "Implement 401 intercept and token refresh logic in api.ts",
+      "description": "In src/lib/api.ts, add a response interceptor. On 401: call POST /api/v1/auth/refresh with the current token. On refresh success: update localStorage and retry the original request. On refresh failure: clear localStorage token and redirect to /<locale>/login.",
+      "assigned_to": "frontend",
+      "status": "done",
+      "priority": "critical",
+      "story": "STORY-005",
+      "created_by": "pm",
+      "created_at": "2026-03-09",
+      "updated_at": "2026-03-09",
+      "acceptance_criteria": [
+        "A 401 response triggers a refresh attempt before logging out",
+        "On successful refresh, the original request is retried transparently",
+        "On failed refresh, localStorage token is cleared and user is redirected to login",
+        "The TOKEN_KEY constant is defined once and referenced everywhere"
+      ],
+      "comments": [
+        {
+          "author": "qa",
+          "date": "2026-03-09",
+          "text": "Previous api.ts had no refresh logic: on any 401 it immediately wiped the token and used window.location.href='/login' (non-locale-aware). Fixed: added TOKEN_KEY='kp_access_token' export, _isRetry guard to prevent infinite loops, refresh attempt before logout, locale-aware redirect using window.location.pathname, and kp_auth cookie clearing. Frontend logic is complete; end-to-end validation blocked on BUG-001 (backend /auth/refresh endpoint missing)."
+        }
+      ],
+      "blocked_reason": null,
+      "related_bug": "BUG-001"
+    },
+    {
+      "id": "TASK-020",
+      "type": "chore",
+      "title": "Verify protected route redirects for /saved, /profile, /settings",
+      "description": "Confirm that unauthenticated users navigating to /<locale>/saved, /<locale>/profile, or /<locale>/settings are redirected to /<locale>/login. The redirect should be handled in src/middleware.ts or a client-side layout guard — pick one approach and be consistent.",
+      "assigned_to": "frontend",
+      "status": "done",
+      "priority": "critical",
+      "story": "STORY-005",
+      "created_by": "pm",
+      "created_at": "2026-03-09",
+      "updated_at": "2026-03-09",
+      "acceptance_criteria": [
+        "Unauthenticated user visiting /saved is redirected to login",
+        "Unauthenticated user visiting /profile is redirected to login",
+        "Unauthenticated user visiting /settings is redirected to login",
+        "Redirect uses next/navigation router, not window.location"
+      ],
+      "comments": [
+        {
+          "author": "qa",
+          "date": "2026-03-09",
+          "text": "Previous middleware.ts was i18n-only — no auth guard existed. /saved rendered mock data for any visitor; /profile showed a soft inline message; /settings was fully accessible. Fixed middleware to check kp_auth cookie and redirect to /<locale>/login?next=<path> for protected routes. Login, signup, and logout updated to set/clear the cookie accordingly. Approach uses edge middleware + cookie signal (localStorage is inaccessible at the edge). See DEC-004. BUG-005 resolved."
+        }
+      ],
+      "blocked_reason": null,
+      "related_bug": "BUG-005"
+    },
+    {
+      "id": "TASK-021",
+      "type": "chore",
+      "title": "Verify onboarding wizard auth step uses correct endpoint and token key",
+      "description": "In OnboardingWizard.tsx, confirm the auth step calls POST /api/v1/auth/login and stores the token under the same TOKEN_KEY constant defined in api.ts. Confirm the user is redirected to /<locale>/feed on success.",
+      "assigned_to": "frontend",
+      "status": "blocked",
+      "priority": "critical",
+      "story": "STORY-005",
+      "created_by": "pm",
+      "created_at": "2026-03-09",
+      "updated_at": "2026-03-09",
+      "acceptance_criteria": [
+        "Onboarding auth step calls /api/v1/auth/login",
+        "Token is stored under the same key as the standalone login page",
+        "User is redirected to feed on success"
+      ],
+      "comments": [
+        {
+          "author": "qa",
+          "date": "2026-03-09",
+          "text": "BLOCKED by BUG-004. The OnboardingWizard auth step shows only OAuth placeholders and a skip link — no email/password form, no login call, no token stored. Fix task TASK-025 created. This task cannot be verified until TASK-025 is done."
+        }
+      ],
+      "blocked_reason": "BUG-004 — onboarding wizard auth step has no login form. Fix task TASK-025 must be completed first.",
+      "related_bug": "BUG-004"
+    },
+    {
+      "id": "TASK-022",
+      "type": "feat",
+      "title": "Write Vitest tests for useAuth login, token storage, and refresh flows",
+      "description": "Write Vitest tests for useAuth.ts using MSW: successful login stores token in localStorage; subsequent requests include Authorization header; 401 triggers refresh call; failed refresh clears token and triggers redirect.",
+      "assigned_to": "frontend",
+      "status": "done",
+      "priority": "critical",
+      "story": "STORY-005",
+      "created_by": "pm",
+      "created_at": "2026-03-09",
+      "updated_at": "2026-03-09",
+      "acceptance_criteria": [
+        "Successful login test: token appears in localStorage",
+        "Subsequent request test: Authorization header is present",
+        "401 + successful refresh test: original request is retried",
+        "401 + failed refresh test: token is cleared from localStorage"
+      ],
+      "comments": [
+        {
+          "author": "qa",
+          "date": "2026-03-09",
+          "text": "No Vitest infrastructure existed (not in package.json, no config, no setup). Created from scratch: vitest.config.ts (jsdom, @/* alias), package.json updated with all devDependencies (vitest, @vitejs/plugin-react, @testing-library/react, @testing-library/user-event, @testing-library/jest-dom, msw, jsdom), src/tests/setup.ts (MSW lifecycle), src/tests/mocks/handlers.ts (auth fixtures), src/tests/mocks/server.ts, src/tests/useAuth.test.ts (tests for all 4 ACs plus no-infinite-retry and header-scoping). Run 'npm install' then 'npm run test' to execute."
+        }
+      ],
+      "blocked_reason": null,
+      "related_bug": null
+    },
+    {
+      "id": "TASK-023",
+      "type": "chore",
+      "title": "Verify backend /users/me and /auth/refresh endpoints against real JWT",
+      "description": "Manually test GET /api/v1/users/me and POST /api/v1/auth/refresh using a valid JWT obtained from /auth/login. Confirm both return the expected responses documented in API_GUIDE.md. No code changes expected.",
+      "assigned_to": "backend",
+      "status": "blocked",
+      "priority": "critical",
+      "story": "STORY-005",
+      "created_by": "pm",
+      "created_at": "2026-03-09",
+      "updated_at": "2026-03-09",
+      "acceptance_criteria": [
+        "GET /api/v1/users/me with valid JWT returns 200 and user object",
+        "POST /api/v1/auth/refresh with valid JWT returns 200 and new access_token",
+        "Both endpoints return 401 when no token is provided"
+      ],
+      "comments": [
+        {
+          "author": "qa",
+          "date": "2026-03-09",
+          "text": "BLOCKED by BUG-001. GET /api/v1/users/me confirmed to exist in users.py. POST /api/v1/auth/refresh does NOT exist in the backend. API_GUIDE.md documents it but auth.py has no refresh route. This task cannot be verified until TASK-024 is done."
+        }
+      ],
+      "blocked_reason": "BUG-001 — POST /api/v1/auth/refresh endpoint missing from backend. TASK-024 must be completed first.",
+      "related_bug": "BUG-001"
+    },
+    {
+      "id": "TASK-024",
+      "type": "fix",
+      "title": "Implement POST /api/v1/auth/refresh endpoint in backend",
+      "description": "Add POST /auth/refresh to backend/app/api/v1/endpoints/auth.py. The endpoint must accept a Bearer token in the Authorization header, validate it using the existing get_current_user_required dependency, issue a new access token with a refreshed expiry, and return { access_token, token_type }. Return 401 if the token is absent or invalid. This unblocks TASK-023 and the frontend 401-refresh flow.",
+      "assigned_to": "backend",
+      "status": "backlog",
+      "priority": "critical",
+      "story": "STORY-005",
+      "created_by": "qa",
+      "created_at": "2026-03-09",
+      "updated_at": "2026-03-09",
+      "acceptance_criteria": [
+        "POST /api/v1/auth/refresh with valid Bearer token returns 200 and { access_token, token_type }",
+        "POST /api/v1/auth/refresh with no token returns 401",
+        "POST /api/v1/auth/refresh with expired/invalid token returns 401",
+        "The returned access_token has a fresh expiry (not the original expiry)"
+      ],
+      "comments": [],
+      "blocked_reason": null,
+      "related_bug": "BUG-001"
+    },
+    {
+      "id": "TASK-025",
+      "type": "fix",
+      "title": "Add email/password login form to onboarding wizard auth step",
+      "description": "The OnboardingWizard auth step (step 4 in OnboardingWizard.tsx) currently shows only placeholder OAuth buttons and a skip link. It must be updated to include a minimal email + password form that calls POST /api/v1/auth/login, stores the returned token under TOKEN_KEY (imported from src/lib/api.ts), sets the kp_auth cookie, and redirects to /<locale>/feed. Use the same login logic as login/page.tsx to ensure the token key is consistent.",
+      "assigned_to": "frontend",
+      "status": "backlog",
+      "priority": "critical",
+      "story": "STORY-005",
+      "created_by": "qa",
+      "created_at": "2026-03-09",
+      "updated_at": "2026-03-09",
+      "acceptance_criteria": [
+        "Onboarding auth step renders an email and password input",
+        "Submitting the form calls POST /api/v1/auth/login",
+        "On success, token is stored under TOKEN_KEY ('kp_access_token') — same key as login/page.tsx",
+        "kp_auth cookie is set to '1' on success so middleware recognises the session",
+        "User is redirected to /<locale>/feed on success",
+        "On failure, an inline error message is shown and no redirect occurs"
+      ],
+      "comments": [],
+      "blocked_reason": null,
+      "related_bug": "BUG-004"
+    }
+  ],
+
+  "bugs": [
+    {
+      "id": "BUG-001",
+      "title": "POST /api/v1/auth/refresh endpoint is missing from the backend",
+      "description": "The API_GUIDE.md documents POST /api/v1/auth/refresh as a supported endpoint, and STORY-005 requires the frontend to call it on every 401 response before logging the user out. However, the endpoint does not exist anywhere in the backend codebase. auth.py defines only /register, /login, and /me. No refresh route is mounted in router.py. As a result every 401 immediately logs the user out rather than transparently refreshing, and TASK-023 is blocked.",
+      "severity": "critical",
+      "found_by": "qa",
+      "found_in": "backend",
+      "status": "story_created",
+      "related_task": "TASK-024",
+      "created_at": "2026-03-09",
+      "steps_to_reproduce": [
+        "Step 1: Obtain a valid JWT via POST /api/v1/auth/login",
+        "Step 2: Send POST /api/v1/auth/refresh with Authorization: Bearer <token>",
+        "Step 3: Observe HTTP 404 Not Found — the route does not exist"
+      ],
+      "expected_behavior": "POST /api/v1/auth/refresh returns HTTP 200 with { access_token, token_type }",
+      "actual_behavior": "HTTP 404 Not Found — no route matches this path",
+      "environment": "backend FastAPI / all environments"
+    },
+    {
+      "id": "BUG-002",
+      "title": "useAuth.ts fetches current user from /auth/me instead of /users/me",
+      "description": "useAuth.ts line 51 called api.get('/auth/me'). The correct canonical endpoint for the current user profile is GET /api/v1/users/me (users.py). The STORY-005 API contract explicitly specifies /users/me. Using /auth/me creates a silent dependency on an undocumented duplicate route.",
+      "severity": "critical",
+      "found_by": "qa",
+      "found_in": "frontend",
+      "status": "resolved",
+      "related_task": "TASK-018",
+      "created_at": "2026-03-09",
+      "steps_to_reproduce": [
+        "Step 1: Log in and obtain a JWT",
+        "Step 2: Navigate to /profile",
+        "Step 3: Observe the network request — it goes to /auth/me instead of /users/me"
+      ],
+      "expected_behavior": "Profile page fetches user data from GET /api/v1/users/me",
+      "actual_behavior": "Profile page fetches user data from GET /api/v1/auth/me",
+      "environment": "all frontend environments"
+    },
+    {
+      "id": "BUG-003",
+      "title": "Token key is a bare string literal 'token' in four separate files — no shared constant",
+      "description": "The localStorage key for the JWT was defined as the plain string 'token' in useAuth.ts, api.ts, login/page.tsx, and signup/page.tsx. STORY-005 acceptance criteria require a single TOKEN_KEY constant defined in one place. A future rename or typo in any file silently breaks auth.",
+      "severity": "high",
+      "found_by": "qa",
+      "found_in": "frontend",
+      "status": "resolved",
+      "related_task": "TASK-019",
+      "created_at": "2026-03-09",
+      "steps_to_reproduce": [
+        "Step 1: Grep frontend/src for localStorage.getItem('token') and localStorage.setItem('token')",
+        "Step 2: Observe the string 'token' repeated in 4 files"
+      ],
+      "expected_behavior": "A single TOKEN_KEY constant exported from src/lib/api.ts is used everywhere",
+      "actual_behavior": "The string 'token' is hard-coded as a literal in useAuth.ts, api.ts, login/page.tsx, and signup/page.tsx",
+      "environment": "all frontend environments"
+    },
+    {
+      "id": "BUG-004",
+      "title": "Onboarding wizard auth step performs no login call and stores no token",
+      "description": "The OnboardingWizard.tsx auth step (step 4) shows only placeholder OAuth buttons and a skip link. There is no email/password form and no call to POST /api/v1/auth/login. Users always continue to the feed as unauthenticated guests. STORY-005 acceptance criterion 6 is entirely unmet.",
+      "severity": "critical",
+      "found_by": "qa",
+      "found_in": "frontend",
+      "status": "story_created",
+      "related_task": "TASK-025",
+      "created_at": "2026-03-09",
+      "steps_to_reproduce": [
+        "Step 1: Navigate to the root path to trigger the onboarding wizard",
+        "Step 2: Complete steps 1-3 (language, interests, reading time)",
+        "Step 3: Reach step 4 (auth step) — observe no email/password form",
+        "Step 4: Click 'Continue without account' or Next",
+        "Step 5: Arrive at the feed — no token in localStorage, user is a guest"
+      ],
+      "expected_behavior": "Auth step presents an email + password form; on success calls /auth/login, stores token under TOKEN_KEY, redirects to feed",
+      "actual_behavior": "Auth step shows OAuth placeholders and a skip link only — no login call is made, no token stored",
+      "environment": "all frontend environments / all browsers"
+    },
+    {
+      "id": "BUG-005",
+      "title": "Protected routes /saved, /profile, /settings have no auth guard — unauthenticated users see full UI",
+      "description": "The middleware.ts handled only i18n routing. /saved rendered with mock articles for any visitor; /profile showed a soft inline message; /settings showed the full settings UI for unauthenticated users. STORY-005 acceptance criterion 5 was not met.",
+      "severity": "high",
+      "found_by": "qa",
+      "found_in": "frontend",
+      "status": "resolved",
+      "related_task": "TASK-020",
+      "created_at": "2026-03-09",
+      "steps_to_reproduce": [
+        "Step 1: Ensure no token or kp_auth cookie is present",
+        "Step 2: Navigate directly to /en/saved — page renders with mock articles, no redirect",
+        "Step 3: Navigate to /en/profile — soft message shown, no redirect",
+        "Step 4: Navigate to /en/settings — full settings UI accessible"
+      ],
+      "expected_behavior": "All three routes immediately redirect to /<locale>/login when the user is unauthenticated",
+      "actual_behavior": "/saved and /settings render fully; /profile shows a soft message but does not redirect",
+      "environment": "all frontend environments / all browsers"
+    },
+    {
+      "id": "BUG-006",
+      "title": "logout() in useAuth.ts used window.location.href instead of router.push — breaks locale routing",
+      "description": "The logout function called window.location.href = '/' which navigates to root with a full page reload, ignoring the user's current locale (e.g. a /uk user is sent to / not /uk/login). STORY-005 UI/UX notes require router.push for all navigations.",
+      "severity": "medium",
+      "found_by": "qa",
+      "found_in": "frontend",
+      "status": "resolved",
+      "related_task": "TASK-018",
+      "created_at": "2026-03-09",
+      "steps_to_reproduce": [
+        "Step 1: Set locale to 'uk' and log in",
+        "Step 2: Navigate to /uk/profile",
+        "Step 3: Click logout",
+        "Step 4: Observe hard redirect to / instead of /uk/login"
+      ],
+      "expected_behavior": "Logout navigates to /<current-locale>/login using router.push with no full page reload",
+      "actual_behavior": "Logout navigates to / using window.location.href — full page reload, locale lost",
+      "environment": "all frontend environments / all browsers"
+    }
+  ],
+
+  "sessions": [
+    {
+      "id": "SESSION-QA-001",
+      "agent": "qa",
+      "date": "2026-03-09",
+      "tasks_reviewed": ["TASK-018", "TASK-019", "TASK-020", "TASK-021", "TASK-022", "TASK-023"],
+      "bugs_found": ["BUG-001", "BUG-002", "BUG-003", "BUG-004", "BUG-005", "BUG-006"],
+      "tests_written": [
+        "frontend/src/tests/setup.ts",
+        "frontend/src/tests/mocks/handlers.ts",
+        "frontend/src/tests/mocks/server.ts",
+        "frontend/src/tests/useAuth.test.ts"
+      ],
+      "summary": "Full end-to-end auth audit for STORY-005. Confirmed the /auth/me mismatch (BUG-002, now fixed in useAuth.ts). Found 5 additional bugs: missing /auth/refresh backend endpoint (BUG-001, critical — creates new TASK-024), no TOKEN_KEY constant (BUG-003, fixed in api.ts + all consumers), onboarding wizard auth step has no login form (BUG-004, critical — creates new TASK-025), no protected-route auth guard (BUG-005, fixed in middleware.ts), logout using hard window.location redirect (BUG-006, fixed in useAuth.ts). TASK-018, TASK-019, TASK-020, TASK-022 marked done. TASK-021 and TASK-023 blocked. Built Vitest test infrastructure from scratch covering all TASK-022 acceptance criteria. STORY-005 moved to in_progress, blocked on BUG-001 and BUG-004.",
+      "next_steps": [
+        "Backend developer: implement POST /api/v1/auth/refresh endpoint (TASK-024) — critical blocker",
+        "Frontend developer: add email/password login form to onboarding wizard auth step (TASK-025) — critical blocker",
+        "After TASK-024 and TASK-025 are done: run 'npm install' then 'npm run test' in frontend/ to execute the 13 Vitest auth tests",
+        "After both tasks are done: QA re-runs full STORY-005 acceptance criteria sign-off",
+        "PM: review BUG-001 and BUG-004, confirm TASK-024 assignment to backend developer"
+      ]
+    }
+  ],
+
+  "decisions": [
+    {
+      "id": "DEC-001",
+      "date": "2026-03-09",
+      "made_by": "pm",
+      "title": "Fix feed pagination on the frontend only — backend cursor approach is correct",
+      "context": "The frontend used skip/limit offset pagination against a backend that implements cursor-based pagination. Two approaches existed: (a) add skip/limit support to the backend, or (b) update the frontend to use cursor. Option (a) would duplicate pagination logic and degrade performance on large datasets. Cursor-based pagination is already implemented, tested at the DB layer, and is the correct long-term approach.",
+      "decision": "Update the frontend to use cursor-based pagination via useInfiniteQuery. The backend is unchanged.",
+      "alternatives_considered": [
+        "Add skip/limit fallback to the backend feed endpoint",
+        "Use offset pagination on both sides temporarily and migrate later"
+      ],
+      "rationale": "Cursor-based pagination is more performant and already correct on the backend. Changing the frontend is a smaller, lower-risk change than adding a second pagination strategy to the backend."
+    },
+    {
+      "id": "DEC-002",
+      "date": "2026-03-09",
+      "made_by": "pm",
+      "title": "Use SQLite in-memory database for backend tests, not a test PostgreSQL instance",
+      "context": "STORY-003 requires an isolated test database. SQLite in-memory (via aiosqlite) is faster, requires no external service, and works in CI without Docker. The tradeoff is that SQLite and PostgreSQL have minor dialect differences. For the critical-path tests in Sprint 1, these differences are unlikely to surface.",
+      "decision": "Use aiosqlite + SQLite in-memory for Sprint 1 backend tests. Revisit and migrate to a test PostgreSQL container in Sprint 2 if dialect issues are found.",
+      "alternatives_considered": [
+        "Real PostgreSQL test database via TEST_DATABASE_URL and Docker",
+        "Mocking the SQLAlchemy session entirely (fragile, too far from production)"
+      ],
+      "rationale": "Speed and zero-dependency setup win for Sprint 1. The team is small and CI should be fast. PostgreSQL dialect compatibility is a Sprint 2 concern."
+    },
+    {
+      "id": "DEC-003",
+      "date": "2026-03-09",
+      "made_by": "pm",
+      "title": "Block STORY-004 (frontend tests) on STORY-001 and STORY-002 fixes",
+      "context": "Writing frontend tests before the pagination and search URL bugs are fixed would produce tests that validate broken behaviour. If those tests were later updated to match the fix, it would be unclear whether the test change or the fix caused the behaviour change.",
+      "decision": "STORY-004 status is set to blocked until STORY-001 and STORY-002 are merged to main.",
+      "alternatives_considered": [
+        "Write tests that document the broken behaviour and update them when the fix lands",
+        "Write tests only for unaffected components and leave hook tests until after the fix"
+      ],
+      "rationale": "Tests written against correct behaviour from the start are cleaner, easier to review, and carry more trust. The block is short-lived — STORY-001 and STORY-002 are the highest-priority items in the sprint."
+    },
+    {
+      "id": "DEC-004",
+      "date": "2026-03-09",
+      "made_by": "qa",
+      "title": "Use edge middleware + kp_auth cookie for protected-route redirects, not client-side guards",
+      "context": "The Next.js middleware runs at the edge before any React rendering and cannot read localStorage. Two options: (a) middleware checks a lightweight auth cookie as a presence signal, or (b) each protected page component checks useAuth() and redirects client-side. Option (b) causes a flash of unauthenticated UI before the redirect fires.",
+      "decision": "Middleware checks for a kp_auth=1 cookie. Login and signup set this cookie on success; logout and the api.ts 401 handler clear it. This provides a fast edge redirect with no UI flash.",
+      "alternatives_considered": [
+        "Client-side layout guard using useAuth() and useEffect with router.push",
+        "Server-side session with HttpOnly cookie containing the JWT (out of scope for this sprint)"
+      ],
+      "rationale": "Edge redirect is faster, produces no flash of unauthenticated UI, and is the standard Next.js middleware pattern for auth guards. The kp_auth cookie is intentionally minimal — it signals session presence, not a cryptographic proof; the JWT is still validated by FastAPI on every API call."
+    }
+  ],
+
+  "task_schema": {
+    "_description": "Reference schema for task objects. Not used directly.",
+    "id": "TASK-XXX",
+    "type": "feat | fix | chore",
+    "title": "Short descriptive title",
+    "description": "Full description of what needs to be done",
+    "assigned_to": "frontend | backend | qa | pm",
+    "status": "backlog | in_progress | in_review | done | blocked",
+    "priority": "critical | high | medium | low",
+    "story": "STORY-XXX or null",
+    "created_by": "pm | qa | user",
+    "created_at": "YYYY-MM-DD",
+    "updated_at": "YYYY-MM-DD",
+    "acceptance_criteria": ["Criterion 1", "Criterion 2"],
+    "comments": [
+      {
+        "author": "agent-name or user",
+        "date": "YYYY-MM-DD",
+        "text": "Comment content"
+      }
+    ],
+    "blocked_reason": null,
+    "related_bug": null
+  },
+
+  "story_schema": {
+    "_description": "Reference schema for story objects. Not used directly. Full story documents live in docs/stories/.",
+    "id": "STORY-XXX",
+    "title": "Short active-voice title",
+    "type": "feature | improvement | spike",
+    "priority": "critical | high | medium | low",
+    "status": "draft | ready | in_progress | in_review | done | blocked",
+    "assigned_to": "frontend | backend | qa | pm",
+    "sprint": "sprint-N",
+    "estimated_points": "1 | 2 | 3 | 5 | 8 | 13",
+    "blocked_by": "STORY-XXX / TASK-XXX or null",
+    "blocked_reason": "null or string",
+    "task_ids": ["TASK-XXX"],
+    "created_by": "pm | qa | user",
+    "created_at": "YYYY-MM-DD",
+    "updated_at": "YYYY-MM-DD",
+    "file": "docs/stories/STORY-XXX.md"
+  },
+
+  "bug_schema": {
+    "_description": "Reference schema for bug objects. Not used directly.",
+    "id": "BUG-XXX",
+    "title": "Short descriptive title — what breaks, where",
+    "description": "Full description",
+    "severity": "critical | high | medium | low",
+    "found_by": "qa",
+    "found_in": "frontend | backend",
+    "status": "open | story_created | in_progress | resolved | wont_fix",
+    "related_task": "TASK-XXX or null",
+    "created_at": "YYYY-MM-DD",
+    "steps_to_reproduce": ["Step 1", "Step 2"],
+    "expected_behavior": "What should happen",
+    "actual_behavior": "What actually happens",
+    "environment": "e.g. mobile Chrome 120 / desktop Safari 17"
+  },
+
+  "session_schema": {
+    "_description": "Reference schema for session log entries. Not used directly.",
+    "id": "SESSION-FE-001 | SESSION-BE-001 | SESSION-QA-001 | SESSION-PM-001",
+    "agent": "frontend | backend | qa | pm",
+    "date": "YYYY-MM-DD",
+    "tasks_worked": ["TASK-XXX"],
+    "bugs_found": ["BUG-XXX"],
+    "summary": "What was done this session",
+    "decisions_made": ["Any decisions made"],
+    "next_steps": ["What comes next"]
+  },
+
+  "decision_schema": {
+    "_description": "Reference schema for architectural/technical decisions. Not used directly.",
+    "id": "DEC-XXX",
+    "date": "YYYY-MM-DD",
+    "made_by": "pm | user | claude",
+    "title": "Short title",
+    "context": "Why this decision needed to be made",
+    "decision": "What was decided",
+    "alternatives_considered": ["Option A", "Option B"],
+    "rationale": "Why this option was chosen"
+  }
+}

@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useLocale, useTranslations } from 'next-intl'
-import { api } from '@/lib/api'
+import { api, TOKEN_KEY } from '@/lib/api'
 
 export default function SignupPage() {
   const [name, setName] = useState('')
@@ -28,7 +28,8 @@ export default function SignupPage() {
     setLoading(true)
     try {
       const response = await api.post<{ accessToken: string }>('/auth/register', { email, password, name })
-      localStorage.setItem('token', response.accessToken)
+      localStorage.setItem(TOKEN_KEY, response.accessToken)
+      document.cookie = 'kp_auth=1; path=/; SameSite=Lax'
       localStorage.setItem('onboarded', 'true')
       router.push(`/${locale}/feed`)
     } catch (err: any) {
