@@ -5,29 +5,19 @@ A minimalist web app that helps you discover interesting Wikipedia articles base
 ## Stack
 
 - **Frontend:** Next.js 14, TypeScript, Tailwind CSS, Framer Motion, next-intl (EN/UK/RU)
-- **Backend:** Python 3.12, FastAPI, SQLAlchemy 2.0 (async), Alembic
-- **Database:** PostgreSQL (Neon free tier for production)
-- **Deploy:** Vercel (frontend) + Render (backend)
+- **Backend:** Ruby on Rails 7.1 (API mode), PostgreSQL, JWT auth, rack-cors
+- **Database:** PostgreSQL (Vercel Postgres / Neon free tier)
+- **Deploy:** Vercel (frontend + backend)
 
-## Quick Start
-
-### Option 1: Docker (recommended)
-```bash
-docker-compose up -d
-# Frontend: http://localhost:3000
-# Backend: http://localhost:8000/docs
-```
-
-### Option 2: Manual
+## Quick Start (Local)
 
 **Backend:**
 ```bash
 cd backend
-python -m venv .venv
-source .venv/bin/activate  # Windows: .venv\Scripts\activate
-pip install -e ".[dev]"
-alembic upgrade head
-uvicorn app.main:app --reload --port 8000
+bundle install
+rails db:create db:migrate db:seed
+rails server -p 8000
+# API: http://localhost:8000/api/v1
 ```
 
 **Frontend:**
@@ -35,35 +25,72 @@ uvicorn app.main:app --reload --port 8000
 cd frontend
 npm install
 npm run dev
+# App: http://localhost:3000
 ```
 
-## Deploy (Free Tier)
+## Deploy to Vercel (Free Tier)
 
-1. **Database:** Create free PostgreSQL on [Neon](https://neon.tech)
-2. **Backend:** Deploy to [Render](https://render.com) — connect GitHub, set env vars
-3. **Frontend:** Deploy to [Vercel](https://vercel.com) — connect GitHub, set `NEXT_PUBLIC_API_URL`
+### Backend
+1. Push to GitHub
+2. Import `backend/` folder as a new Vercel project
+3. Framework: **Other** (Vercel detects `config.ru` automatically via `@vercel/ruby`)
+4. Add **Vercel Postgres** storage → connects to the project automatically (injects `POSTGRES_URL`)
+5. Add environment variables:
+   ```
+   RAILS_ENV=production
+   JWT_SECRET=your-secret-key-min-32-chars
+   FRONTEND_URL=https://your-frontend.vercel.app
+   ```
+6. After first deploy, run migrations:
+   ```bash
+   vercel env pull && DATABASE_URL=$POSTGRES_URL rails db:migrate db:seed
+   ```
+
+### Frontend
+1. Import `frontend/` folder as a new Vercel project
+2. Add environment variable:
+   ```
+   NEXT_PUBLIC_API_URL=https://your-backend.vercel.app/api/v1
+   ```
 
 ## Environment Variables
 
-### Backend (.env)
-```
-DATABASE_URL=postgresql+asyncpg://user:pass@host:5432/dbname
-JWT_SECRET=your-secret-key
-CORS_ORIGINS=["https://your-frontend.vercel.app"]
+### Backend (`backend/.env`)
+```env
+POSTGRES_URL=postgresql://user:pass@host:5432/dbname
+JWT_SECRET=your-secret-key-min-32-chars
+FRONTEND_URL=http://localhost:3000
+RAILS_ENV=development
 ```
 
-### Frontend (.env.local)
+### Frontend (`frontend/.env.local`)
+```env
+NEXT_PUBLIC_API_URL=http://localhost:8000/api/v1
 ```
-NEXT_PUBLIC_API_URL=https://your-backend.onrender.com
-```
+
+## API Endpoints
+
+| Method | Path | Auth | Description |
+|--------|------|------|-------------|
+| POST | `/api/v1/auth/register` | — | Register new user |
+| POST | `/api/v1/auth/login` | — | Login, returns JWT |
+| GET | `/api/v1/auth/me` | ✓ | Current user info |
+| GET | `/api/v1/articles/feed` | — | Paginated article feed |
+| GET | `/api/v1/articles/random` | — | Random Wikipedia articles |
+| GET | `/api/v1/articles/search?q=` | — | Search articles |
+| GET | `/api/v1/articles/:id` | — | Full article |
+| POST | `/api/v1/articles/:id/like` | ✓ | Toggle like |
+| POST | `/api/v1/articles/:id/bookmark` | ✓ | Toggle bookmark |
+| POST | `/api/v1/articles/:id/share` | ✓ | Record share |
+| POST | `/api/v1/articles/:id/not-interested` | ✓ | Dismiss article |
 
 ## Features
 
 - Vertical scroll feed (Reels-style) with scroll-snap
 - Like, save, dismiss, share articles
-- Personalized recommendations based on interests
+- Live Wikipedia article fetching (+ DB cache fallback)
 - 3 languages: English, Ukrainian, Russian
-- Dark/Light theme
+- Dark/Light/System theme
 - Keyboard shortcuts (L, S, D, Space, Enter)
 - Responsive: mobile, tablet, desktop
-- Minimalist design with clean typography
+- JWT authentication (30-day tokens)
